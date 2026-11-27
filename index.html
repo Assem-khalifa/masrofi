@@ -824,7 +824,7 @@ if(cfg&&cfg.apiKey&&app){(async()=>{try{
   window.masrofiCloud={
     signIn:async()=>{try{await A.signInWithPopup(auth,provider)}catch(e){
       if(e&&(e.code==='auth/popup-blocked'||e.code==='auth/operation-not-supported-in-this-environment'||e.code==='auth/web-storage-unsupported'))return A.signInWithRedirect(auth,provider);
-      if(e&&e.code!=='auth/popup-closed-by-user'&&e.code!=='auth/cancelled-popup-request')app.toast('مقدرتش أسجل الدخول ('+((e&&e.code)||'unknown').replace('auth/','')+')')}},
+      if(e&&e.code!=='auth/popup-closed-by-user'&&e.code!=='auth/cancelled-popup-request')app.toast('مقدرتش أسجل الدخول: '+String((e&&(e.code||e.message))||e).replace('auth/','').slice(0,140))}},
     signOut:async()=>{try{if(unsub)unsub();unsub=null;ref=null;await A.signOut(auth)}catch(e){}
       try{localStorage.removeItem('masrofi-v1')}catch(e){}app.replace({start:null,items:[]});app.toast('سجّلت خروج')},
     saveProfile:async(p)=>{Object.assign(profile,p);app.setAccount({profile:{...profile}});if(ref){try{await F.setDoc(ref,{profile},{merge:true})}catch(e){}}}
