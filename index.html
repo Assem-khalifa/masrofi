@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#3b1f5c">
 <title>مصروفي</title>
 <link rel="manifest" href="manifest.json">
@@ -10,209 +10,403 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-/* VOICE: friendly pocket tool, calm and quick — opened ten times a day
-   IDEA: a wallet: the money left is the thing, every expense comes out of it
-   PICTURE: big remaining balance on a plum card with a draining meter
-   COLOUR and TYPE: white, deep plum field, coral accent for spending; Cairo
-   LAYOUT: one column, balance card, quick-add form, day-by-day list */
+/* VOICE: calm pocket tool, one job: say what you spent
+   IDEA: a wallet you talk to; the balance is the hero, the mic is the only action
+   PICTURE: huge remaining balance, plain list, big coral mic in the thumb zone
+   COLOUR and TYPE: white / plum / coral, matches the app icon; Cairo
+   LAYOUT: header, balance, list, fixed bottom mic; sheets for listening and review */
 :root{color-scheme:light dark;
---bg:light-dark(#f6f5f8,#0f0d14);--card:light-dark(#fff,#1a1722);--ink:light-dark(#16141c,#f1eef7);
---mute:light-dark(#6c6778,#a49fb2);--line:light-dark(#e6e3ec,#2c2836);
---plum:#3b1f5c;--plum2:#5a3489;--coral:#ff5a4e;--mint:#1f9e6e}
+--bg:light-dark(#ffffff,#0f0d14);--soft:light-dark(#f4f2f7,#1a1722);--ink:light-dark(#16141c,#f1eef7);
+--mute:light-dark(#6c6778,#a49fb2);--line:light-dark(#ebe8f0,#2a2634);
+--plum:#3b1f5c;--plum2:light-dark(#5a3489,#b48cff);--coral:#ff5a4e;--mint:#14a374}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
-*{box-sizing:border-box;min-width:0}
+*{box-sizing:border-box;min-width:0;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Cairo,Tahoma,sans-serif;overflow-x:clip}
-.wrap{max-width:560px;margin:0 auto;padding:16px 16px 96px}
-h1{font-size:20px;margin:4px 0 14px;font-weight:800;display:flex;justify-content:space-between;align-items:center}
-h2{font-size:17px;margin:26px 0 10px;font-weight:800}
-.hero{background:linear-gradient(150deg,var(--plum2),var(--plum));color:#fff;border-radius:22px;padding:22px 20px;box-shadow:0 14px 30px -14px #3b1f5c99}
-.hero small{opacity:.8;font-size:14px}
-.big{font-size:clamp(40px,12vw,56px);font-weight:800;line-height:1.05;margin:4px 0 2px;white-space:nowrap}
-.big span{font-size:18px;font-weight:600;opacity:.8}
-.meter{height:10px;background:#ffffff2e;border-radius:9px;overflow:hidden;margin:14px 0 6px}
-.meter i{display:block;height:100%;background:#fff;border-radius:9px;transition:width .5s}
+button{font:inherit;color:inherit;cursor:pointer}
+input,select{font:16px Cairo,sans-serif;color:var(--ink)}
+:focus-visible{outline:2px solid var(--plum2);outline-offset:2px}
+.wrap{max-width:520px;margin:0 auto;padding:max(14px,env(safe-area-inset-top)) 18px 150px}
+header{display:flex;justify-content:space-between;align-items:center;min-height:44px}
+header b{font-size:18px;font-weight:800}
+.icon-btn{border:0;background:var(--soft);width:44px;height:44px;border-radius:14px;display:grid;place-items:center}
+.icon-btn svg{width:22px;height:22px}
+.bal{padding:22px 0 18px;border-bottom:1px solid var(--line)}
+.bal small{color:var(--mute);font-size:15px}
+.big{font-size:clamp(46px,15vw,64px);font-weight:800;line-height:1.05;margin:2px 0 10px;white-space:nowrap}
+.big span{font-size:20px;font-weight:600;color:var(--mute)}
+.big.neg{color:var(--coral)}
+.meter{height:8px;background:var(--soft);border-radius:8px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--plum2);border-radius:8px;transition:width .5s}
 .meter i.low{background:var(--coral)}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
-.stats div{background:#ffffff1a;border-radius:14px;padding:10px 12px}
-.stats b{display:block;font-size:20px;white-space:nowrap}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:16px}
-.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border-radius:12px;padding:4px;margin-bottom:12px}
-.seg button{border:0;background:none;color:var(--mute);font:600 15px Cairo,sans-serif;min-height:40px;border-radius:9px;cursor:pointer}
-.seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 4px #0002}
-label{display:block;font-size:14px;color:var(--mute);margin:8px 0 4px}
-input{width:100%;font:16px Cairo,sans-serif;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);min-height:48px}
-input:focus,button:focus-visible{outline:2px solid var(--plum2);outline-offset:2px}
-#amt{font-size:26px;font-weight:800;text-align:center}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
-.chips button{border:1px solid var(--line);background:var(--bg);color:var(--ink);font:600 14px Cairo,sans-serif;padding:8px 14px;border-radius:99px;min-height:40px;cursor:pointer}
-.chips button.on{background:var(--plum);border-color:var(--plum);color:#fff}
-.go{width:100%;margin-top:14px;border:0;background:var(--coral);color:#fff;font:800 18px Cairo,sans-serif;min-height:52px;border-radius:14px;cursor:pointer}
-.go.in{background:var(--mint)}
-.ghost{border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 14px Cairo,sans-serif;min-height:40px;padding:0 14px;border-radius:10px;cursor:pointer}
-.day{margin-top:14px}
-.dayh{display:flex;justify-content:space-between;color:var(--mute);font-size:14px;font-weight:600;padding:0 4px 6px}
-.row{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);padding:10px 12px;border-radius:14px;margin-bottom:6px}
-.ic{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;font-weight:800;color:#fff;flex:none}
-.row .t{flex:1}.row .t div{font-weight:600}.row .t small{color:var(--mute)}
-.row .a{font-weight:800;white-space:nowrap}
-.row .a.out{color:var(--coral)}.row .a.in{color:var(--mint)}
-.x{border:0;background:none;color:var(--mute);font-size:20px;width:36px;height:36px;border-radius:9px;cursor:pointer}
-.bar{display:grid;grid-template-columns:5.5em 1fr auto;gap:10px;align-items:center;margin:8px 0;font-size:14px}
-.bar .tr{height:12px;background:var(--bg);border-radius:8px;overflow:hidden}
-.bar .tr i{display:block;height:100%;border-radius:8px}
-.bar b{white-space:nowrap}
-.empty{color:var(--mute);text-align:center;padding:22px 8px}
-.toast{position:fixed;inset-inline:16px;bottom:16px;max-width:528px;margin:auto;background:var(--ink);color:var(--bg);border-radius:14px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;transform:translateY(140%);transition:transform .25s}
-.toast.show{transform:none}
-.toast button{border:0;background:none;color:var(--coral);font:800 15px Cairo,sans-serif;min-height:40px;cursor:pointer}
-.modal{position:fixed;inset:0;background:#0008;display:none;place-items:center;padding:16px}
-.modal.show{display:grid}
-.modal .panel{max-width:420px;width:100%}
-.setup{text-align:center}
-.setup .big{color:var(--plum2)}
-textarea{width:100%;min-height:90px;font:13px monospace;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);padding:8px}
-@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.sub{display:flex;gap:18px;margin-top:10px;color:var(--mute);font-size:14px;flex-wrap:wrap}
+.sub b{color:var(--ink);white-space:nowrap}
+.dayh{display:flex;justify-content:space-between;color:var(--mute);font-size:14px;font-weight:600;padding:18px 0 4px}
+.row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.dot{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;font-weight:800;color:#fff;flex:none;font-size:15px}
+.row .t{flex:1}.row .t div{font-weight:600}.row .t small{color:var(--mute);font-size:13px}
+.amt{font-weight:800;white-space:nowrap;direction:ltr}
+.amt.out{color:var(--ink)}.amt.in{color:var(--mint)}
+.x{border:0;background:none;color:var(--mute);width:40px;height:40px;border-radius:10px;font-size:22px;flex:none}
+.empty{text-align:center;color:var(--mute);padding:40px 12px}
+.empty b{display:block;color:var(--ink);font-size:18px;margin-bottom:4px}
+.dock{position:fixed;inset-inline:0;bottom:0;padding:14px 18px max(18px,env(safe-area-inset-bottom));display:flex;justify-content:center;align-items:center;gap:22px;background:linear-gradient(transparent,var(--bg) 35%)}
+.mic{width:76px;height:76px;border-radius:50%;border:0;background:var(--coral);color:#fff;display:grid;place-items:center;box-shadow:0 10px 24px -8px #ff5a4eaa}
+.mic svg{width:32px;height:32px}
+.dock .icon-btn{width:52px;height:52px;border-radius:50%}
+.hint{position:fixed;inset-inline:0;bottom:calc(112px + env(safe-area-inset-bottom));text-align:center;color:var(--mute);font-size:13px;pointer-events:none}
+/* sheets */
+.scrim{position:fixed;inset:0;background:#0007;display:none;align-items:flex-end;justify-content:center;z-index:10}
+.scrim.show{display:flex}
+.sheet{background:var(--bg);width:100%;max-width:520px;border-radius:24px 24px 0 0;padding:20px 18px max(20px,env(safe-area-inset-bottom));max-height:88vh;overflow:auto;animation:up .22s ease-out}
+@keyframes up{from{transform:translateY(40px);opacity:.5}}
+.sheet h2{font-size:20px;margin:0 0 4px;font-weight:800}
+.sheet p{margin:0 0 14px;color:var(--mute);font-size:14px}
+.listen{text-align:center;padding:10px 0}
+.pulse{width:104px;height:104px;margin:14px auto;border-radius:50%;background:var(--coral);display:grid;place-items:center;color:#fff;position:relative}
+.pulse svg{width:40px;height:40px}
+.pulse::before,.pulse::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--coral);opacity:.35;animation:ring 1.6s infinite}
+.pulse::after{animation-delay:.8s}
+@keyframes ring{to{transform:scale(1.7);opacity:0}}
+.live{min-height:56px;font-size:19px;font-weight:600;line-height:1.5;margin:8px 0 16px}
+.live i{color:var(--mute);font-style:normal}
+.btn{width:100%;border:0;min-height:52px;border-radius:16px;font-weight:800;font-size:17px;background:var(--plum);color:#fff}
+.btn.coral{background:var(--coral)}
+.btn.ghost{background:var(--soft);color:var(--ink);font-weight:600}
+.btns{display:grid;gap:10px;margin-top:14px}
+.ritem{display:grid;grid-template-columns:40px 1fr 96px 40px;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.ritem input{width:100%;min-height:44px;border:1px solid var(--line);border-radius:12px;background:var(--soft);padding:6px 10px}
+.ritem .a{text-align:center;font-weight:800;direction:ltr}
+.ritem select{grid-column:2/4;min-height:40px;border:0;background:none;color:var(--mute);font-size:14px;padding:0}
+.ritem .dot{grid-row:span 2}
+.ritem .x{grid-row:span 2}
+.heard{background:var(--soft);border-radius:14px;padding:10px 12px;font-size:14px;color:var(--mute);margin-bottom:6px}
+.type{display:flex;gap:8px}
+.type input{flex:1;min-height:52px;border:1px solid var(--line);border-radius:14px;background:var(--soft);padding:0 14px}
+.setup{min-height:80vh;display:flex;flex-direction:column;justify-content:center;text-align:center}
+.setup h1{font-size:30px;line-height:1.2;margin:0 0 8px}
+.setup p{color:var(--mute);margin:0 0 22px}
+.setup input{width:100%;font-size:34px;font-weight:800;text-align:center;min-height:68px;border:1px solid var(--line);border-radius:18px;background:var(--soft);margin-bottom:12px}
+textarea{width:100%;min-height:80px;font:13px monospace;border:1px solid var(--line);border-radius:12px;background:var(--soft);color:var(--ink);padding:8px}
+.toast{position:fixed;inset-inline:18px;bottom:calc(120px + env(safe-area-inset-bottom));max-width:484px;margin:auto;background:var(--ink);color:var(--bg);border-radius:14px;padding:8px 14px;display:flex;justify-content:space-between;align-items:center;gap:10px;opacity:0;transform:translateY(10px);transition:.2s;pointer-events:none;z-index:20}
+.toast.show{opacity:1;transform:none;pointer-events:auto}
+.toast button{border:0;background:none;color:var(--coral);font-weight:800;min-height:40px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1><span>مصروفي</span><button class="ghost" id="setBtn">الإعدادات</button></h1>
-
-  <section id="setup" class="panel setup" hidden>
-    <h2 style="margin-top:4px">معاك كام دلوقتي؟</h2>
-    <p style="color:var(--mute);margin:0 0 10px">اكتب المبلغ اللي معاك، وكل مصروف هيتخصم منه.</p>
-    <input id="startIn" type="number" inputmode="decimal" placeholder="مثلاً 1000" style="font-size:26px;text-align:center;font-weight:800">
-    <button class="go" id="startBtn" style="background:var(--plum)">ابدأ</button>
+  <section id="setup" class="setup" hidden>
+    <h1>معاك كام دلوقتي؟</h1>
+    <p>اكتب المبلغ اللي معاك، وكل حاجة تصرفها هتتخصم منه.</p>
+    <input id="startIn" type="number" inputmode="decimal" placeholder="1000" aria-label="المبلغ اللي معاك">
+    <button class="btn" id="startBtn">ابدأ</button>
   </section>
 
   <main id="app" hidden>
-    <section class="hero">
+    <header>
+      <b>مصروفي</b>
+      <button class="icon-btn" id="setBtn" aria-label="الإعدادات"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
+    </header>
+    <section class="bal">
       <small>الباقي معاك</small>
-      <div class="big" id="left">0 <span>ج.م</span></div>
+      <div class="big" id="left">0</div>
       <div class="meter"><i id="meter"></i></div>
-      <small id="ofTotal"></small>
-      <div class="stats">
-        <div><small>صرفت النهارده</small><b id="today">0</b></div>
-        <div><small>صرفت آخر 7 أيام</small><b id="week">0</b></div>
-      </div>
+      <div class="sub"><span>النهارده <b id="today">0</b></span><span>الشهر ده <b id="month">0</b></span></div>
     </section>
-
-    <section class="panel">
-      <div class="seg"><button id="mOut" class="on">صرفت</button><button id="mIn">دخل فلوس</button></div>
-      <label for="amt">المبلغ</label>
-      <input id="amt" type="number" inputmode="decimal" placeholder="0">
-      <label for="note">على إيه؟</label>
-      <input id="note" type="text" placeholder="مثلاً: غدا، أوبر، كارت شحن" maxlength="60">
-      <div id="catBox"><label>النوع</label><div class="chips" id="chips"></div></div>
-      <button class="go" id="addBtn">سجّل المصروف</button>
-    </section>
-
-    <h2>صرفت على إيه الشهر ده</h2>
-    <div class="panel" id="cats" style="margin-top:0"></div>
-
-    <h2>السجل</h2>
-    <div id="list"></div>
+    <section id="list"></section>
   </main>
 </div>
 
+<div class="hint" id="hint" hidden>دوس على المايك وقول صرفت إيه</div>
+<div class="dock" id="dock" hidden>
+  <button class="icon-btn" id="kbBtn" aria-label="اكتب بدل ما تتكلم"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h.01M11 10h.01M15 10h.01M8 14h8"/></svg></button>
+  <button class="mic" id="micBtn" aria-label="سجّل بصوتك"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+  <span style="width:52px"></span>
+</div>
+
+<!-- listening sheet -->
+<div class="scrim" id="listenSheet"><div class="sheet listen">
+  <h2 id="lsTitle">بسمعك…</h2>
+  <p id="lsSub">قول كل اللي صرفته، مثلاً: «ألف جنيه أكل و٢٠ مواصلات و٥٠٠ هدوم»</p>
+  <div class="pulse" id="pulse"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></div>
+  <div class="live" id="live"><i>…</i></div>
+  <div class="btns"><button class="btn coral" id="doneBtn">خلصت</button><button class="btn ghost" id="cancelBtn">إلغاء</button></div>
+</div></div>
+
+<!-- type sheet -->
+<div class="scrim" id="typeSheet"><div class="sheet">
+  <h2>اكتب صرفت إيه</h2>
+  <p>اكتب زي ما بتتكلم، مثلاً: 1000 أكل و20 مواصلات و500 هدوم</p>
+  <form class="type" id="typeForm"><input id="typeIn" type="text" autocomplete="off" aria-label="صرفت إيه"><button class="btn" style="width:auto;padding:0 20px">تمام</button></form>
+  <div class="btns"><button class="btn ghost" data-close>إلغاء</button></div>
+</div></div>
+
+<!-- review sheet -->
+<div class="scrim" id="reviewSheet"><div class="sheet">
+  <h2 id="rvTitle">راجع قبل ما تسجّل</h2>
+  <p>تقدر تعدّل أي رقم أو اسم، أو تمسح سطر.</p>
+  <div class="heard" id="heard"></div>
+  <div id="rvList"></div>
+  <div class="btns"><button class="btn coral" id="saveBtn">سجّل</button><button class="btn ghost" id="againBtn">اتكلم تاني</button><button class="btn ghost" data-close>إلغاء</button></div>
+</div></div>
+
+<!-- settings sheet -->
+<div class="scrim" id="setSheet"><div class="sheet">
+  <h2>الإعدادات</h2>
+  <p>عشان تضيف فلوس، دوس على المايك وقول مثلاً «قبضت ٥٠٠٠».</p>
+  <div class="btns">
+    <button class="btn ghost" id="copyBtn">انسخ نسخة احتياطية</button>
+    <textarea id="restore" placeholder="أو الصق نسخة احتياطية هنا" aria-label="نسخة احتياطية"></textarea>
+    <button class="btn ghost" id="restoreBtn">استرجع النسخة</button>
+    <button class="btn ghost" id="resetBtn" style="color:var(--coral)">امسح كل حاجة وابدأ من جديد</button>
+    <button class="btn" data-close>تمام</button>
+  </div>
+</div></div>
+
 <div class="toast" id="toast"><span id="toastTx"></span><button id="undoBtn">تراجع</button></div>
 
-<div class="modal" id="modal"><div class="panel">
-  <h2 style="margin-top:0">الإعدادات</h2>
-  <button class="ghost" id="copyBtn" style="width:100%">انسخ نسخة احتياطية</button>
-  <label for="restore">أو الصق نسخة احتياطية هنا لاسترجاعها</label>
-  <textarea id="restore"></textarea>
-  <button class="ghost" id="restoreBtn" style="width:100%;margin-top:8px">استرجع</button>
-  <button class="ghost" id="resetBtn" style="width:100%;margin-top:18px;color:var(--coral)">امسح كل حاجة وابدأ من جديد</button>
-  <button class="go" id="closeBtn" style="background:var(--plum)">تمام</button>
-</div></div>
+<script id="parser">
+/* Egyptian Arabic expense parser: text -> [{amt,name,cat,type}] (no DOM) */
+var CATS=[['أكل','#ff8a3d'],['مواصلات','#3d8bff'],['قهوة ومشروبات','#a0612f'],['فواتير وشحن','#7a5af8'],['هدوم وتسوق','#e5487d'],['تاني','#8a8496'],['صحة ودوا','#14a3a3']];
+var KW=[
+ ['اكل','غدا','فطار','عشا','مطعم','سندوتش','ساندوتش','فول','طعميه','كشري','بيتزا','فراخ','لحمه','لحم','سمك','خضار','فاكهه','سوبر','ماركت','بقاله','عيش','حلويات','حلو','شاورما','برجر','كريب','اكله','وجبه','طلبات','دليفري','بيض','لبن','جبنه','رز','مكرونه','تموين'],
+ ['مواصلات','اوبر','تاكسي','ميكروباص','مكروباص','مترو','اتوبيس','بنزين','سولار','كريم','ديدي','توكتوك','تكتك','سواق','باركينج','جراج','قطر','قطار','طياره','عربيه','اندرايفر','سكوتر'],
+ ['قهوه','كافيه','كافي','شاي','نسكافيه','ستاربكس','عصير','مشروب','مشروبات','بيبسي','كوكا','ميه','مياه معدنيه','كابتشينو','لاتيه','سجاير','سجائر','شيشه'],
+ ['فاتوره','فواتير','كهربا','كهرباء','غاز','نت','انترنت','شحن','كارت','رصيد','باقه','ايجار','اشتراك','تليفون','موبايل','جيم','نادي','مصاريف','مدرسه','دروس','كورس'],
+ ['هدوم','لبس','جزمه','كوتشي','قميص','بنطلون','تيشيرت','تيشرت','شنطه','جاكيت','فستان','تسوق','شوبينج','هديه','هدايا','ساعه','نضاره'],
+ [],
+ ['دوا','دواء','ادويه','دكتور','دكتوره','صيدليه','تحاليل','تحليل','اشعه','كشف','علاج','مستشفي','اسنان','عيادة','عياده']];
+var INCOME=['قبضت','قبض','مرتب','مرتبي','المرتب','دخلي','دخل','جالي','جاتلي','اخدت','خدت','ضيف','زود','زود','اضافه','ايداع','حولي','حولولي','كسبت','عيديه'];
+var FILL=['انا','صرفت','صرف','صرفنا','دفعت','دفع','دفعنا','اشتريت','اشتري','جبت','جيبت','النهارده','النهاردا','انهارده','امبارح','الصبح','بالليل','حوالي','تقريبا','يعني','كمان','برضه','برده','جنيه','جنيها','جنيهات','جنية','الجنيه','ج','م','ب','في','فى','علي','عشان','ل','من','مع','و','حق','بتاع','بتاعه','بس','كده','دول','ده','دي','حاجه','حاجات','اللي','مثلا','ف','على','ع','بحوالي','و','ثم','وبعدين','بعدين','تمن','بسعر','سعر','قيمته','مصريه','مصري'];
+var NUM={'واحد':1,'واحده':1,'اتنين':2,'اثنين':2,'اتنان':2,'اثنان':2,'تلاته':3,'ثلاثه':3,'تلات':3,'ثلاث':3,'اربعه':4,'اربع':4,'خمسه':5,'خمس':5,'سته':6,'ست':6,'سبعه':7,'سبع':7,'تمانيه':8,'ثمانيه':8,'تمان':8,'ثمان':8,'تسعه':9,'تسع':9,'عشره':10,'عشر':10,
+'حداشر':11,'احداشر':11,'اتناشر':12,'اطناشر':12,'تلتاشر':13,'تلطاشر':13,'اربعتاشر':14,'اربعطاشر':14,'خمستاشر':15,'خمسطاشر':15,'ستاشر':16,'سطاشر':16,'سبعتاشر':17,'سبعطاشر':17,'تمنتاشر':18,'تمنطاشر':18,'تسعتاشر':19,'تسعطاشر':19,
+'عشرين':20,'تلاتين':30,'ثلاثين':30,'اربعين':40,'خمسين':50,'ستين':60,'سبعين':70,'تمانين':80,'ثمانين':80,'تسعين':90,
+'ميه':100,'مايه':100,'مائه':100,'ميت':100,'ميتين':200,'متين':200,'مئتين':200,'مائتين':200,'تلتميه':300,'ثلاثمائه':300,'تلاتميه':300,'ربعميه':400,'اربعميه':400,'اربعمائه':400,'خمسميه':500,'خمسمائه':500,'ستميه':600,'ستمائه':600,'سبعميه':700,'سبعمائه':700,'تمنميه':800,'تمانميه':800,'ثمانمائه':800,'تسعميه':900,'تسعمائه':900,
+'الف':1000,'الاف':1000,'الوف':1000,'الفين':2000,'الفان':2000,'مليون':1e6,'ملايين':1e6,'نص':0.5,'نصف':0.5};
+function letterNorm(w){return w.replace(/[ً-ْـ]/g,'').replace(/[أإآ]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').replace(/ؤ/g,'و').replace(/ئ/g,'ي')}
+function prep(s){
+  s=String(s).replace(/[٠-٩]/g,function(d){return '٠١٢٣٤٥٦٧٨٩'.indexOf(d)}).replace(/[۰-۹]/g,function(d){return '۰۱۲۳۴۵۶۷۸۹'.indexOf(d)});
+  s=s.replace(/(\d)[,٬،](?=\d{3}(\D|$))/g,'$1').replace(/٫/g,'.');
+  s=s.replace(/(\d)([^\d\s.])/g,'$1 $2').replace(/([^\d\s.])(\d)/g,'$1 $2');
+  s=s.replace(/[،,!؟?؛;:\-–()"«»]+/g,' ').replace(/\.(?!\d)/g,' ');
+  return s.split(/\s+/).filter(Boolean);
+}
+function numInfo(n){
+  if(/^\d+(\.\d+)?$/.test(n))return {v:parseFloat(n),k:'d'};
+  var c=[n];if(n.length>2&&n[0]==='و')c.push(n.slice(1));if(n.length>2&&n[0]==='ب')c.push(n.slice(1));if(n.length>3&&n.slice(0,2)==='وب')c.push(n.slice(2));
+  for(var i=0;i<c.length;i++){var v=NUM[c[i]];if(v!==undefined){
+    var k=v===0.5?'h':v>=1000?'s':v>=100?'c':'u';
+    return {v:v,k:k,vow:i>0&&c[i]!==n&&n[0]==='و'};
+  }}
+  return null;
+}
+function place(v){return Math.pow(10,Math.floor(Math.log10(Math.max(v,1))))}
+function readSpans(nt){
+  var spans=[],i=0;
+  while(i<nt.length){
+    var f=numInfo(nt[i]);
+    var dig=function(x){return x!==undefined&&/^\d/.test(x)};
+    if(!f||f.k==='h'||(f.v===100&&f.k==='c'&&(dig(nt[i+1])||dig(nt[i-1])))){i++;continue}
+    var total=0,cur=0,last=0,lastScale=1,j=i,used=false;
+    function add(x,first){
+      if(x.k==='s'){ if(x.v===2000||x.v===1e6&&cur===0){total+=(x.v===2000?2000:x.v)} else total+=(cur||1)*x.v; cur=0;last=x.v===2000?1000:x.v;lastScale=x.v===2000?1000:x.v;}
+      else if(x.k==='c'){ if(x.v===100&&cur>0&&cur<10){cur*=100} else cur+=x.v; last=cur;lastScale=100;}
+      else if(x.k==='h'){ if(lastScale>=1000)total+=lastScale/2; else if(lastScale===100)cur+=50; else cur+=0.5;}
+      else {cur+=x.v;last=x.v;lastScale=place(x.v);}
+    }
+    function canJoin(x,viaWaw){
+      if(x.k==='h')return viaWaw;
+      if(x.k==='s')return !viaWaw&&x.v!==2000&&(cur>0)&&cur<1000;
+      if(x.k==='c'&&x.v===100&&!viaWaw&&cur>0&&cur<10)return true;
+      if(!viaWaw)return false;
+      var lp=place(last);
+      if(x.v<lp)return true;
+      if(last<10&&x.k!=='d'&&x.v>=20&&x.v<=90&&x.v%10===0)return true;
+      return false;
+    }
+    add(f,true);j=i+1;
+    while(j<nt.length){
+      var t=nt[j],x,viaWaw=false,step=1;
+      if(t==='و'&&j+1<nt.length&&(x=numInfo(nt[j+1]))){viaWaw=true;step=2}
+      else if((x=numInfo(t))){viaWaw=!!x.vow}
+      else break;
+      if(!canJoin(x,viaWaw))break;
+      add(x,false);j+=step;
+    }
+    var val=total+cur;
+    if(val>0)spans.push({s:i,e:j,v:Math.round(val*100)/100});
+    i=j;
+  }
+  return spans;
+}
+function isFill(n){return FILL.indexOf(n)>=0}
+function catOf(words){
+  for(var w=0;w<words.length;w++){var n=words[w].replace(/^و(?=..)/,'').replace(/^(بال|وال|ال)(?=..)/,'');
+    for(var c=0;c<KW.length;c++)for(var k=0;k<KW[c].length;k++){var kw=KW[c][k];if(n===kw||(kw.length>=3&&n.indexOf(kw)===0))return c}}
+  return 5;
+}
+function cleanWords(dt,nt,a,b){
+  var out=[],nn=[];
+  for(var i=a;i<b;i++){var n=nt[i];if(isFill(n)||INCOME.indexOf(n)>=0||INCOME.indexOf(n.replace(/^و/,''))>=0)continue;
+    var d=dt[i];if(n.length>3&&n[0]==='و'&&['وجبه','ورق','وصل','ورد','وش'].indexOf(n)<0){d=d.slice(1);n=n.slice(1)}
+    if(isFill(n))continue;out.push(d);nn.push(n)}
+  return {d:out,n:nn};
+}
+function parseSpoken(text){
+  var dt=prep(text),nt=dt.map(letterNorm),spans=readSpans(nt),res=[];
+  if(!spans.length)return {items:[],yesterday:false};
+  var yest=nt.indexOf('امبارح')>=0;
+  var pre=cleanWords(dt,nt,0,spans[0].s).n.length>0;
+  for(var i=0;i<spans.length;i++){
+    var sp=spans[i],prevE=i?spans[i-1].e:0,nextS=i+1<spans.length?spans[i+1].s:nt.length;
+    var before=cleanWords(dt,nt,prevE,sp.s),after=cleanWords(dt,nt,sp.e,nextS);
+    var w=pre?before:after;if(!w.n.length)w=pre?after:before;
+    var near=nt.slice(Math.max(prevE,sp.s-3),sp.s).concat(pre?nt.slice(prevE,sp.s):nt.slice(sp.e,nextS));
+    var inc=near.some(function(n){return INCOME.indexOf(n)>=0||INCOME.indexOf(n.replace(/^و/,''))>=0});
+    var cat=inc?null:catOf(w.n);
+    res.push({amt:sp.v,name:w.d.join(' ')||(inc?(near.some(function(n){return n.indexOf('مرتب')>=0})?'المرتب':'فلوس دخلت'):CATS[cat][0]),cat:cat,type:inc?'in':'out'});
+  }
+  return {items:res,yesterday:yest};
+}
+if(typeof module!=='undefined')module.exports={parseSpoken:parseSpoken};
+</script>
 
 <script>
 {
 const KEY='masrofi-v1';
-const CATS=[['أكل','#ff8a3d'],['مواصلات','#3d8bff'],['قهوة وكافيهات','#a0612f'],['فواتير وشحن','#7a5af8'],['تسوق','#e5487d'],['تاني','#6c6778']];
 const $=id=>document.getElementById(id);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fmt=n=>Math.round(n*100)/100;
-const money=n=>fmt(n).toLocaleString('ar-EG');
-let st={start:null,items:[]},mode='out',cat=0,lastDel=null,tm;
+const money=n=>(Math.round(n*100)/100).toLocaleString('en-US');
+const sum=a=>a.reduce((s,i)=>s+i.amt,0);
+let st={start:null,items:[]},draft=[],draftYest=false,heardText='',lastDel=null,tm;
 
 function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&Array.isArray(s.items))st=s}catch(e){}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
-function dayKey(t){const d=new Date(t);return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
-function dayName(t){
-  const k=dayKey(t),now=Date.now();
-  if(k===dayKey(now))return 'النهارده';
-  if(k===dayKey(now-864e5))return 'امبارح';
-  return new Date(t).toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long'});
-}
+const dayKey=t=>{const d=new Date(t);return d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()};
+function dayName(t){const k=dayKey(t);if(k===dayKey(Date.now()))return 'النهارده';if(k===dayKey(Date.now()-864e5))return 'امبارح';return new Date(t).toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long'})}
+const catInfo=i=>i.type==='in'?['دخل','#14a374']:(CATS[i.cat]||CATS[5]);
 
 function render(){
   const ready=st.start!==null;
-  $('setup').hidden=ready;$('app').hidden=!ready;
+  $('setup').hidden=ready;$('app').hidden=!ready;$('dock').hidden=!ready;
   if(!ready)return;
-  const out=st.items.filter(i=>i.type==='out'),inn=st.items.filter(i=>i.type==='in');
-  const sum=a=>a.reduce((s,i)=>s+i.amt,0);
-  const total=st.start+sum(inn),left=total-sum(out);
-  $('left').innerHTML=esc(money(left))+' <span>ج.م</span>';
+  const out=st.items.filter(i=>i.type==='out'),total=st.start+sum(st.items.filter(i=>i.type==='in')),left=total-sum(out);
+  $('left').innerHTML=esc(money(left))+' <span>ج.م</span>';$('left').classList.toggle('neg',left<0);
   const pct=total>0?Math.max(0,Math.min(100,left/total*100)):0;
   $('meter').style.width=pct+'%';$('meter').className=pct<20?'low':'';
-  $('ofTotal').textContent='من أصل '+money(total)+' ج.م · فاضل '+Math.round(pct)+'%';
-  const tk=dayKey(Date.now());
+  const now=new Date(),tk=dayKey(now);
   $('today').textContent=money(sum(out.filter(i=>dayKey(i.t)===tk)))+' ج.م';
-  $('week').textContent=money(sum(out.filter(i=>i.t>Date.now()-7*864e5)))+' ج.م';
-
-  // category bars for current month
-  const m=new Date();const mo=out.filter(i=>{const d=new Date(i.t);return d.getMonth()===m.getMonth()&&d.getFullYear()===m.getFullYear()});
-  const per=CATS.map((c,ix)=>({n:c[0],col:c[1],v:sum(mo.filter(i=>i.cat===ix))})).filter(c=>c.v>0).sort((a,b)=>b.v-a.v);
-  const mx=per.length?per[0].v:1;
-  $('cats').innerHTML=per.length?per.map(c=>`<div class="bar"><span>${esc(c.n)}</span><div class="tr"><i style="width:${c.v/mx*100}%;background:${c.col}"></i></div><b>${esc(money(c.v))}</b></div>`).join(''):'<div class="empty">لسه مفيش مصاريف الشهر ده</div>';
-
-  // list grouped by day
+  $('month').textContent=money(sum(out.filter(i=>{const d=new Date(i.t);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()})))+' ج.م';
   const items=[...st.items].sort((a,b)=>b.t-a.t);
-  if(!items.length){$('list').innerHTML='<div class="empty">سجّل أول مصروف من فوق، وهيظهر هنا.</div>';return}
+  $('hint').hidden=items.length>0;
+  if(!items.length){$('list').innerHTML='<div class="empty"><b>لسه مسجلتش حاجة</b>دوس على المايك وقول مثلاً:<br>«صرفت ١٠٠ أكل و٢٠ مواصلات»</div>';return}
   const groups=[];items.forEach(i=>{const k=dayKey(i.t);let g=groups.find(g=>g.k===k);if(!g)groups.push(g={k,t:i.t,a:[]});g.a.push(i)});
-  $('list').innerHTML=groups.map(g=>{
-    const spent=sum(g.a.filter(i=>i.type==='out'));
-    return `<div class="day"><div class="dayh"><span>${esc(dayName(g.t))}</span><span>صرفت ${esc(money(spent))} ج.م</span></div>`+
-    g.a.map(i=>{
-      const c=i.type==='in'?['دخل','#1f9e6e']:CATS[i.cat]||CATS[5];
-      const time=new Date(i.t).toLocaleTimeString('ar-EG',{hour:'numeric',minute:'2-digit'});
-      return `<div class="row"><div class="ic" style="background:${c[1]}">${esc(c[0].charAt(0))}</div>
-      <div class="t"><div>${esc(i.note||c[0])}</div><small>${esc(c[0])} · ${esc(time)}</small></div>
-      <div class="a ${i.type}">${i.type==='out'?'−':'+'}${esc(money(i.amt))}</div>
-      <button class="x" data-del="${esc(i.id)}" aria-label="امسح">×</button></div>`}).join('')+'</div>'}).join('');
+  $('list').innerHTML=groups.map(g=>`<div class="dayh"><span>${esc(dayName(g.t))}</span><span>${esc(money(sum(g.a.filter(i=>i.type==='out'))))} ج.م</span></div>`+
+    g.a.map(i=>{const c=catInfo(i);return `<div class="row"><div class="dot" style="background:${c[1]}">${esc(c[0].charAt(0))}</div>
+    <div class="t"><div>${esc(i.note||c[0])}</div><small>${esc(c[0])}</small></div>
+    <div class="amt ${i.type}">${i.type==='in'?'+':''}${esc(money(i.amt))}</div>
+    <button class="x" data-del="${esc(i.id)}" aria-label="امسح">×</button></div>`}).join('')).join('');
 }
 
-function setMode(m){
-  mode=m;$('mOut').classList.toggle('on',m==='out');$('mIn').classList.toggle('on',m==='in');
-  $('catBox').hidden=m==='in';
-  $('addBtn').textContent=m==='out'?'سجّل المصروف':'ضيف الفلوس';
-  $('addBtn').classList.toggle('in',m==='in');
-}
-function drawChips(){$('chips').innerHTML=CATS.map((c,i)=>`<button data-cat="${i}" class="${i===cat?'on':''}">${esc(c[0])}</button>`).join('')}
+/* sheets */
+function open(id){document.querySelectorAll('.scrim').forEach(s=>s.classList.remove('show'));if(id)$(id).classList.add('show')}
+document.querySelectorAll('.scrim').forEach(s=>s.addEventListener('click',e=>{if(e.target===s||e.target.closest('[data-close]')){stopRec(true);open(null)}}));
 function toast(t,undo){$('toastTx').textContent=t;$('undoBtn').hidden=!undo;$('toast').classList.add('show');clearTimeout(tm);tm=setTimeout(()=>$('toast').classList.remove('show'),4000)}
 
-$('startBtn').onclick=()=>{const v=parseFloat($('startIn').value);if(!(v>=0)){$('startIn').focus();return}st={start:v,items:[]};save();render();$('amt').focus()};
-$('mOut').onclick=()=>setMode('out');$('mIn').onclick=()=>setMode('in');
-$('chips').onclick=e=>{const b=e.target.closest('[data-cat]');if(!b)return;cat=+b.dataset.cat;drawChips()};
-$('addBtn').onclick=()=>{
-  const v=parseFloat($('amt').value);if(!(v>0)){$('amt').focus();return}
-  st.items.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),amt:v,note:$('note').value.trim(),cat:mode==='out'?cat:null,type:mode,t:Date.now()});
-  save();$('amt').value='';$('note').value='';render();
-  toast(mode==='out'?'اتخصم '+money(v)+' ج.م':'اتضاف '+money(v)+' ج.م',false);
-  if(mode==='in')setMode('out');
+/* review */
+function showReview(text){
+  heardText=text;const r=parseSpoken(text);draft=r.items;draftYest=r.yesterday;
+  $('heard').textContent='سمعتك بتقول: «'+text+'»';
+  if(!draft.length){
+    $('rvTitle').textContent='مفهمتش المبلغ';
+    $('rvList').innerHTML='<p style="margin:10px 0">قول الرقم واضح وبعده الحاجة، مثلاً: «١٠٠ جنيه أكل».</p>';
+    $('saveBtn').hidden=true;open('reviewSheet');return;
+  }
+  $('saveBtn').hidden=false;drawReview();open('reviewSheet');
+}
+function drawReview(){
+  $('rvTitle').textContent=draft.length===1?'راجع قبل ما تسجّل':'لقيت '+draft.length+' حاجات';
+  const opts=i=>'<option value="in"'+(i.type==='in'?' selected':'')+'>دخل (فلوس جت)</option>'+CATS.map((c,ix)=>`<option value="${ix}"${i.type==='out'&&i.cat===ix?' selected':''}>${esc(c[0])}</option>`).join('');
+  $('rvList').innerHTML=draft.map((i,ix)=>{const c=catInfo(i);return `<div class="ritem" data-ix="${ix}">
+    <div class="dot" style="background:${c[1]}">${esc(c[0].charAt(0))}</div>
+    <input data-f="name" value="${esc(i.name)}" aria-label="اسم المصروف">
+    <input class="a" data-f="amt" type="number" inputmode="decimal" value="${esc(i.amt)}" aria-label="المبلغ">
+    <button class="x" data-rm="${ix}" aria-label="امسح السطر">×</button>
+    <select data-f="cat" aria-label="النوع">${opts(i)}</select></div>`}).join('');
+  updSave();
+}
+function updSave(){
+  const o=draft.filter(i=>i.type==='out'),n=draft.length;
+  $('saveBtn').textContent=n?('سجّل'+(n>1?' الكل':'')+' · '+money(sum(o))+' ج.م'+(o.length<n?' + دخل '+money(sum(draft.filter(i=>i.type==='in'))):'')):'مفيش حاجة';
+  $('saveBtn').disabled=!n;
+}
+$('rvList').addEventListener('input',e=>{const r=e.target.closest('.ritem');if(!r)return;const i=draft[+r.dataset.ix],f=e.target.dataset.f;
+  if(f==='name')i.name=e.target.value;
+  if(f==='amt'){i.amt=parseFloat(e.target.value)||0;updSave()}
+  if(f==='cat'){if(e.target.value==='in'){i.type='in';i.cat=null}else{i.type='out';i.cat=+e.target.value}drawReview()}});
+$('rvList').addEventListener('click',e=>{const b=e.target.closest('[data-rm]');if(!b)return;draft.splice(+b.dataset.rm,1);if(!draft.length){open(null);return}drawReview()});
+$('saveBtn').onclick=()=>{
+  const t=draftYest?Date.now()-864e5:Date.now(),ok=draft.filter(i=>i.amt>0);
+  ok.forEach((i,k)=>st.items.push({id:Date.now().toString(36)+k+Math.random().toString(36).slice(2,5),amt:i.amt,note:i.name.trim(),cat:i.cat,type:i.type,t:t+k}));
+  save();render();open(null);
+  toast(ok.length===1?'اتسجل '+money(ok[0].amt)+' ج.م':'اتسجلوا '+ok.length+' حاجات',false);
 };
-$('amt').onkeydown=$('note').onkeydown=e=>{if(e.key==='Enter')$('addBtn').click()};
+$('againBtn').onclick=()=>startRec();
+
+/* voice */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+let rec=null,finals=[],interim='',cancelled=false;
+function liveText(){const t=finals.join(' ');return esc(t)+(interim?' <i>'+esc(interim)+'</i>':'')||'<i>…</i>'}
+function startRec(){
+  if(!SR){openType('المتصفح ده مش بيدعم الصوت. اكتب بدل كده، أو افتح التطبيق من Chrome.');return}
+  finals=[];interim='';cancelled=false;
+  $('lsTitle').textContent='بسمعك…';$('live').innerHTML='<i>…</i>';$('pulse').style.opacity=1;open('listenSheet');
+  try{rec=new SR()}catch(e){openType('مقدرتش أشغل المايك. اكتب بدل كده.');return}
+  rec.lang='ar-EG';rec.interimResults=true;rec.continuous=true;rec.maxAlternatives=1;
+  rec.onresult=e=>{
+    interim='';
+    for(let k=e.resultIndex;k<e.results.length;k++){
+      const t=e.results[k][0].transcript.trim();if(!t)continue;
+      if(e.results[k].isFinal){
+        const last=finals[finals.length-1]||'';
+        if(last&&t.startsWith(last))finals[finals.length-1]=t;else if(!(last&&last.endsWith(t)))finals.push(t);
+      }else interim=t;
+    }
+    $('live').innerHTML=liveText();
+  };
+  rec.onerror=e=>{
+    if(e.error==='not-allowed'||e.error==='service-not-allowed'){cancelled=true;openType('محتاج إذن المايك. اسمح بيه من إعدادات المتصفح، أو اكتب بدل كده.')}
+    else if(e.error==='no-speech'){cancelled=true;$('lsTitle').textContent='مسمعتش حاجة';$('live').innerHTML='<i>دوس «اتكلم تاني» وقرّب الموبايل شوية</i>';$('pulse').style.opacity=.4;$('doneBtn').textContent='اتكلم تاني';}
+    else if(e.error==='network'){cancelled=true;openType('التعرف على الصوت محتاج نت. اكتب بدل كده.')}
+  };
+  rec.onend=()=>{rec=null;if(cancelled)return;const text=(finals.join(' ')+' '+interim).trim();if(text)showReview(text);else{$('lsTitle').textContent='مسمعتش حاجة';$('pulse').style.opacity=.4;$('doneBtn').textContent='اتكلم تاني'}};
+  $('doneBtn').textContent='خلصت';
+  try{rec.start()}catch(e){}
+}
+function stopRec(cancel){if(rec){cancelled=!!cancel;try{rec.stop()}catch(e){}}}
+$('micBtn').onclick=startRec;
+$('doneBtn').onclick=()=>{if(rec){$('lsTitle').textContent='بفهم…';stopRec(false)}else startRec()};
+$('cancelBtn').onclick=()=>{stopRec(true);open(null)};
+
+/* typing fallback */
+function openType(msg){open('typeSheet');if(msg)toast(msg,false);setTimeout(()=>$('typeIn').focus(),150)}
+$('kbBtn').onclick=()=>openType();
+$('typeForm').onsubmit=e=>{e.preventDefault();const v=$('typeIn').value.trim();if(!v)return;$('typeIn').value='';showReview(v)};
+
+/* list delete + undo */
 $('list').onclick=e=>{const b=e.target.closest('[data-del]');if(!b)return;const ix=st.items.findIndex(i=>i.id===b.dataset.del);if(ix<0)return;lastDel=st.items.splice(ix,1)[0];save();render();toast('اتمسح',true)};
 $('undoBtn').onclick=()=>{if(lastDel){st.items.push(lastDel);lastDel=null;save();render()}$('toast').classList.remove('show')};
-$('setBtn').onclick=()=>{$('restore').value='';$('resetBtn').dataset.sure='';$('resetBtn').textContent='امسح كل حاجة وابدأ من جديد';$('modal').classList.add('show')};
-$('closeBtn').onclick=()=>$('modal').classList.remove('show');
-$('copyBtn').onclick=async()=>{try{await navigator.clipboard.writeText(JSON.stringify(st));toast('اتنسخت، احفظها في الملاحظات',false)}catch(e){$('restore').value=JSON.stringify(st);toast('انسخ النص من المربع',false)}};
-$('restoreBtn').onclick=()=>{try{const s=JSON.parse($('restore').value);if(typeof s.start!=='number'||!Array.isArray(s.items))throw 0;st=s;save();render();$('modal').classList.remove('show');toast('اترجعت البيانات',false)}catch(e){toast('النسخة دي مش سليمة',false)}};
-$('resetBtn').onclick=()=>{const b=$('resetBtn');if(!b.dataset.sure){b.dataset.sure='1';b.textContent='متأكد؟ دوس تاني للمسح';return}st={start:null,items:[]};save();$('modal').classList.remove('show');render()};
 
-load();drawChips();setMode('out');render();
+/* setup + settings */
+$('startBtn').onclick=()=>{const v=parseFloat($('startIn').value);if(!(v>=0)){$('startIn').focus();return}st={start:v,items:[]};save();render()};
+$('startIn').onkeydown=e=>{if(e.key==='Enter')$('startBtn').click()};
+$('setBtn').onclick=()=>{$('restore').value='';$('resetBtn').dataset.sure='';$('resetBtn').textContent='امسح كل حاجة وابدأ من جديد';open('setSheet')};
+$('copyBtn').onclick=async()=>{try{await navigator.clipboard.writeText(JSON.stringify(st));toast('اتنسخت، احفظها في الملاحظات',false)}catch(e){$('restore').value=JSON.stringify(st);toast('انسخ النص من المربع',false)}};
+$('restoreBtn').onclick=()=>{try{const s=JSON.parse($('restore').value);if(typeof s.start!=='number'||!Array.isArray(s.items))throw 0;st=s;save();render();open(null);toast('اترجعت البيانات',false)}catch(e){toast('النسخة دي مش سليمة',false)}};
+$('resetBtn').onclick=()=>{const b=$('resetBtn');if(!b.dataset.sure){b.dataset.sure='1';b.textContent='متأكد؟ دوس تاني للمسح';return}st={start:null,items:[]};save();open(null);render()};
+
+load();render();
 }
 </script>
 <script>if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(()=>{})}</script>
