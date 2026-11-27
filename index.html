@@ -9,7 +9,7 @@
 <script>window.FIREBASE_CONFIG={apiKey:"AIzaSyCEAn5MnYjCR4dGDQYSMR-4WHQh9kxZCSA",authDomain:"masrofi-935ce.firebaseapp.com",projectId:"masrofi-935ce",storageBucket:"masrofi-935ce.firebasestorage.app",messagingSenderId:"155618851810",appId:"1:155618851810:web:80fc061bade29994cb17bb",googleClientId:"155618851810-8g95kf1kknlq9hpvfsetse8qj854auvn.apps.googleusercontent.com"};</script>
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Sora:wght@600;700&display=swap" rel="stylesheet">
 <style>
 /* VOICE: calm pocket tool, one job: say what you spent
    IDEA: a wallet you talk to; the balance is the hero, the mic is the only action
@@ -82,6 +82,22 @@ header b{font-size:18px;font-weight:800}
 .restore textarea{margin:6px 0}
 .acc-line{font-size:16px!important;color:var(--ink)!important;margin:14px 0 16px!important}
 .danger-link{color:var(--coral)!important;justify-self:center}
+.splash{position:fixed;inset:0;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;background:url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22160%22%20height=%22160%22%20viewBox=%220%200%20160%20160%22%3E%3Cg%20fill=%22none%22%20stroke=%22%23c4c4c4%22%20stroke-opacity=%22.03%22%20stroke-width=%222%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%3E%20%3Cg%20transform=%22translate%2814%2016%29%20rotate%28-12%2014%2014%29%22%3E%3Ccircle%20cx=%2214%22%20cy=%2214%22%20r=%2212%22/%3E%3Ccircle%20cx=%2214%22%20cy=%2214%22%20r=%227%22/%3E%3C/g%3E%20%3Cg%20transform=%22translate%2892%2010%29%20rotate%288%2018%2012%29%22%3E%3Crect%20x=%220%22%20y=%220%22%20width=%2236%22%20height=%2224%22%20rx=%225%22/%3E%3Cpath%20d=%22M0%208h36M6%2017h8%22/%3E%3C/g%3E%20%3Cg%20transform=%22translate%2860%2062%29%20rotate%28-6%2016%2014%29%22%3E%3Cpath%20d=%22M2%206h28a3%203%200%200%201%203%203v15a3%203%200%200%201-3%203H5a3%203%200%200%201-3-3z%22/%3E%3Cpath%20d=%22M2%206l20-5%203%205%22/%3E%3Ccircle%20cx=%2226%22%20cy=%2216%22%20r=%222%22/%3E%3C/g%3E%20%3Cg%20transform=%22translate%2818%20104%29%20rotate%2810%2012%2016%29%22%3E%3Cpath%20d=%22M2%200h20v30l-4-3-3%203-3-3-3%203-3-3-4%203z%22/%3E%3Cpath%20d=%22M7%208h10M7%2014h10M7%2020h6%22/%3E%3C/g%3E%20%3Cg%20transform=%22translate%28112%2096%29%20rotate%28-10%2010%2016%29%22%3E%3Crect%20x=%225%22%20y=%220%22%20width=%2210%22%20height=%2218%22%20rx=%225%22/%3E%3Cpath%20d=%22M0%2013a10%2010%200%200%200%2020%200M10%2023v6%22/%3E%3C/g%3E%20%3Cg%20transform=%22translate%28124%2052%29%22%3E%3Cpath%20d=%22M0%2010l6-6%206%206%206-6%22/%3E%3C/g%3E%20%3Cg%20transform=%22translate%2862%20128%29%22%3E%3Ccircle%20cx=%226%22%20cy=%226%22%20r=%225%22/%3E%3C/g%3E%20%3C/g%3E%3C/svg%3E") 0 0/160px 160px repeat,radial-gradient(120% 80% at 30% 15%,#7b4fc4 0%,#46247a 55%,#1f0f3a 100%);color:#fff;padding:24px 24px max(32px,env(safe-area-inset-bottom));transition:opacity .45s ease}
+.splash.out{opacity:0;pointer-events:none}
+.sp-mid{display:grid;justify-items:center;gap:10px;flex:1;align-content:center}
+.logo{width:132px;height:132px;overflow:visible;filter:drop-shadow(0 18px 24px #0006)}
+.logo .w{transform-origin:60px 70px;animation:pop .7s cubic-bezier(.2,1.4,.4,1) both}
+.logo .c1{animation:rise .6s .55s cubic-bezier(.2,1.3,.4,1) both}
+.logo .c2{animation:rise .6s .7s cubic-bezier(.2,1.3,.4,1) both}
+.sp-name{font-family:Sora,'Cairo',sans-serif;font-size:40px;font-weight:700;margin:8px 0 0;letter-spacing:-.035em;line-height:1;animation:fade .6s 1s both}
+.sp-go{width:100%;max-width:360px;display:grid;gap:10px;justify-items:center;min-height:70px;transition:opacity .5s,transform .5s}
+.sp-go[hidden]{display:grid!important;visibility:hidden;opacity:0;transform:translateY(8px)}
+.sp-go .gsi{color-scheme:light;width:100%}
+.sp-msg{margin:0;color:#e6dcf7;font-size:14px;min-height:20px;text-align:center}
+@keyframes pop{from{transform:scale(.3);opacity:0}to{transform:none;opacity:1}}
+@keyframes rise{from{transform:translateY(26px);opacity:0}to{transform:none;opacity:1}}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.gsi{color-scheme:light}
 .dayh{display:flex;justify-content:space-between;color:var(--mute);font-size:14px;font-weight:600;padding:18px 0 4px}
 .row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
 .dot{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;font-weight:800;color:#fff;flex:none;font-size:15px}
@@ -182,12 +198,28 @@ textarea{width:100%;min-height:80px;font:13px monospace;border:1px solid var(--l
 </style>
 </head>
 <body>
+<section id="splash" class="splash">
+  <div class="sp-mid"><svg class="logo" viewBox="0 0 120 120" aria-hidden="true">
+  <defs><linearGradient id="lgB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#d9cfee"/></linearGradient>
+  <linearGradient id="lgC" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8a70"/><stop offset="1" stop-color="#e8443c"/></linearGradient></defs>
+  <g class="c1"><rect x="30" y="22" width="40" height="26" rx="5" fill="#ffc44d" transform="rotate(-8 50 35)"/></g>
+  <g class="c2"><rect x="46" y="24" width="40" height="26" rx="5" fill="#2fc48e" transform="rotate(6 66 37)"/></g>
+  <g class="w"><rect x="18" y="44" width="84" height="56" rx="14" fill="#7d6aa6"/><rect x="18" y="40" width="84" height="56" rx="14" fill="url(#lgB)"/>
+  <rect x="68" y="56" width="40" height="26" rx="10" fill="url(#lgC)"/><circle cx="80" cy="69" r="6" fill="#fff"/></g>
+</svg>
+    <h1 class="sp-name" lang="en" dir="ltr">Masrofi</h1>
+  </div>
+  <div class="sp-go" id="spGo" hidden>
+    <div class="gsi" id="gsiSplash" data-gsi></div>
+    <button class="gbtn" id="spFallback" data-signin hidden><span>سجّل دخول بجوجل</span></button>
+    <p class="sp-msg" id="spMsg"></p>
+  </div>
+</section>
 <div class="wrap">
   <section id="setup" class="setup" hidden>
     <h1>معاك كام دلوقتي؟</h1>
         <input id="startIn" type="number" inputmode="decimal" placeholder="1000" aria-label="المبلغ اللي معاك">
     <button class="btn" id="startBtn">ابدأ</button>
-    <div class="gwrap" data-cloud hidden><div class="gsi" data-gsi hidden></div><button class="gbtn" data-signin><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.8z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-2.9l-3.9-3c-1.1.7-2.5 1.2-4.1 1.2-3.1 0-5.8-2.1-6.7-5H1.3v3.1A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.3 14.3a7.2 7.2 0 0 1 0-4.6V6.6H1.3a12 12 0 0 0 0 10.8z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.3 6.6l4 3.1c.9-2.9 3.6-4.9 6.7-4.9z"/></svg><span>رجّع بياناتك بحساب جوجل</span></button></div>
   </section>
 
   <main id="app" hidden>
@@ -224,7 +256,7 @@ textarea{width:100%;min-height:80px;font:13px monospace;border:1px solid var(--l
       <section class="acc" id="accOut">
         <div class="avatar big-av"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div>
         <p class="acc-line">احفظ مصاريفك في حسابك</p>
-        <div class="gsi" data-gsi hidden></div><button class="gbtn" data-signin data-cloud hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.8z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-2.9l-3.9-3c-1.1.7-2.5 1.2-4.1 1.2-3.1 0-5.8-2.1-6.7-5H1.3v3.1A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.3 14.3a7.2 7.2 0 0 1 0-4.6V6.6H1.3a12 12 0 0 0 0 10.8z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.3 6.6l4 3.1c.9-2.9 3.6-4.9 6.7-4.9z"/></svg><span>سجّل دخول بجوجل</span></button>
+        <button class="gbtn" data-signin data-cloud hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.8z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-2.9l-3.9-3c-1.1.7-2.5 1.2-4.1 1.2-3.1 0-5.8-2.1-6.7-5H1.3v3.1A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.3 14.3a7.2 7.2 0 0 1 0-4.6V6.6H1.3a12 12 0 0 0 0 10.8z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.3 6.6l4 3.1c.9-2.9 3.6-4.9 6.7-4.9z"/></svg><span>سجّل دخول بجوجل</span></button>
         <p class="note" id="cloudOff">تسجيل الدخول لسه ما اتفعّلش في التطبيق.</p>
       </section>
       <section class="acc" id="accIn" hidden>
@@ -288,6 +320,7 @@ textarea{width:100%;min-height:80px;font:13px monospace;border:1px solid var(--l
 
 <div class="toast" id="toast"><span id="toastTx"></span><button id="undoBtn">تراجع</button></div>
 
+<script>window.addEventListener("error",e=>{try{const d=document.createElement("pre");d.style.cssText="position:fixed;bottom:12px;inset-inline:12px;z-index:60;white-space:pre-wrap;background:#300;color:#fbb;padding:10px;border-radius:10px;font-size:12px";d.textContent="خطأ: "+e.message;document.body.appendChild(d)}catch(_){}});</script>
 <script id="parser">
 /* Egyptian Arabic expense parser: text -> [{amt,name,cat,type}] (no DOM) */
 var CATS=[['أكل','#ff8a3d'],['مواصلات','#3d8bff'],['قهوة ومشروبات','#a0612f'],['فواتير وشحن','#7a5af8'],['هدوم وتسوق','#e5487d'],['تاني','#8a8496'],['صحة ودوا','#14a3a3']];
@@ -479,15 +512,20 @@ const money=n=>(Math.round(n*100)/100).toLocaleString('en-US');
 const sum=a=>a.reduce((s,i)=>s+i.amt,0);
 let st={start:null,items:[]},draft=[],draftYest=false,heardText='',lastDel=null,tm;
 
-function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&Array.isArray(s.items))st=s}catch(e){}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&Array.isArray(s.items))st=s}catch(e){}st=clean(st)}
+function clean(x){x=x&&typeof x==='object'?x:{};if(!Array.isArray(x.items))x.items=[];x.items=x.items.filter(i=>i&&typeof i.amt==='number'&&isFinite(i.amt)&&i.t);if(typeof x.start!=='number')x.start=null;return x}
 function persist(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
 function save(){st.u=Date.now();persist();try{window.dispatchEvent(new Event('masrofi:saved'))}catch(e){}}
 const dayKey=t=>{const d=new Date(t);return d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()};
 function dayName(t){const k=dayKey(t);if(k===dayKey(Date.now()))return 'النهارده';if(k===dayKey(Date.now()-864e5))return 'امبارح';return new Date(t).toLocaleDateString('ar-EG',{weekday:'long',day:'numeric',month:'long'})}
 const catInfo=i=>i.type==='in'?['دخل','#14a374']:(CATS[i.cat]||CATS[5]);
 
-function render(){
+let entered=false;
+function render(){try{render0()}catch(err){showErr(err)}}
+function showErr(err){const d=document.createElement('pre');d.style.cssText='position:fixed;bottom:90px;inset-inline:12px;z-index:50;white-space:pre-wrap;background:#300;color:#fbb;padding:10px;border-radius:10px;font-size:12px';d.textContent='خطأ: '+(err&&err.message||err);document.body.appendChild(d)}
+function render0(){
   const ready=st.start!==null;
+  if(!entered){$('setup').hidden=true;$('app').hidden=true;$('dock').hidden=true;return}
   $('setup').hidden=ready;$('app').hidden=!ready;$('dock').hidden=!ready;
   if(!ready)return;
   const out=st.items.filter(i=>i.type==='out'),total=st.start+sum(st.items.filter(i=>i.type==='in')),left=total-sum(out);
@@ -773,7 +811,7 @@ $('setBalBtn').onclick=openSetManual;
 let acct={cloud:false,user:null,profile:{},sync:''};
 function renderAccount(){
   document.querySelectorAll('[data-cloud]').forEach(e=>e.hidden=!acct.cloud);
-  document.querySelectorAll('[data-gsi]').forEach(e=>e.hidden=!acct.gsi);document.querySelectorAll('[data-signin]').forEach(e=>{if(acct.gsi)e.hidden=true});
+
   $('cloudOff').hidden=acct.cloud;
   const u=acct.user;$('accOut').hidden=!!u;$('accIn').hidden=!u;$('logoutBtn').hidden=!u;
   if(u){const name=acct.profile.name||u.name||'',photo=acct.profile.photo||u.photo||'';
@@ -786,7 +824,10 @@ function renderAccount(){
 }
 window.masrofiApp={
   get:()=>st,
-  replace:(s2,silent)=>{st=s2;if(!st.items)st.items=[];persist();hist=[];render();if(tab==='account')renderAccount()},
+  replace:(s2,silent)=>{st=clean(s2);persist();hist=[];render();if(tab==='account')renderAccount()},
+  signedIn:()=>enter(),
+  signedOut:()=>showSplashButton(),
+  splashMsg:(m)=>{$('spMsg').textContent=m||''},
   setAccount:(a)=>{Object.assign(acct,a);renderAccount()},
   toast:(m)=>{toast(m,false);clearTimeout(tm);tm=setTimeout(()=>$('toast').classList.remove('show'),12000)}
 };
@@ -804,6 +845,18 @@ $('photoIn').onchange=async e=>{const f=e.target.files&&e.target.files[0];e.targ
     const data=c.toDataURL('image/jpeg',0.82);
     if(window.masrofiCloud)window.masrofiCloud.saveProfile({photo:data});acct.profile.photo=data;renderAccount();toast('اتغيرت الصورة',false)}
   catch(err){toast('مقدرتش أفتح الصورة دي',false)}};
+
+/* ---------- splash + sign-in gate ---------- */
+const cloudOn=!!(window.FIREBASE_CONFIG&&window.FIREBASE_CONFIG.apiKey);
+let animDone=false,authKnown=null;
+function enter(){authKnown='in';if(!animDone)return;if(entered)return;entered=true;render();if(tab==='account')renderAccount();$('splash').classList.add('out');setTimeout(()=>{$('splash').hidden=true},500)}
+function showSplashButton(){authKnown='out';entered=false;setTab('home');$('splash').hidden=false;$('splash').classList.remove('out');render();if(animDone){$('spGo').hidden=false;$('spMsg').textContent=''}}
+setTimeout(()=>{animDone=true;
+  if(!cloudOn){enter();return}
+  if(authKnown==='in')enter();else if(authKnown==='out')showSplashButton();
+  else setTimeout(()=>{if(authKnown)return; // cloud didn't answer (no internet?)
+    if(st.start!==null&&st.owner){enter()}else{$('spGo').hidden=false;$('spMsg').textContent='اتأكد إن النت شغال وجرب تاني'}},4000)
+},3000);
 load();render();renderAccount();
 }
 </script>
@@ -828,7 +881,7 @@ if(cfg&&cfg.apiKey&&app){(async()=>{try{
       if(e&&(e.code==='auth/popup-blocked'||e.code==='auth/operation-not-supported-in-this-environment'||e.code==='auth/web-storage-unsupported'))return A.signInWithRedirect(auth,provider);
       if(e&&e.code!=='auth/popup-closed-by-user'&&e.code!=='auth/cancelled-popup-request')app.toast('مقدرتش أسجل الدخول: '+String((e&&(e.code||e.message))||e).replace('auth/','').slice(0,140))}},
     signOut:async()=>{try{if(unsub)unsub();unsub=null;ref=null;await A.signOut(auth);if(window.google&&google.accounts&&google.accounts.id)google.accounts.id.disableAutoSelect()}catch(e){}
-      try{localStorage.removeItem('masrofi-v1')}catch(e){}app.replace({start:null,items:[]});app.toast('سجّلت خروج')},
+      try{localStorage.removeItem('masrofi-v1')}catch(e){}app.replace({start:null,items:[]})},
     saveProfile:async(p)=>{Object.assign(profile,p);app.setAccount({profile:{...profile}});if(ref){try{await F.setDoc(ref,{profile},{merge:true})}catch(e){}}}
   };
   app.setAccount({cloud:true});
@@ -837,16 +890,16 @@ if(cfg&&cfg.apiKey&&app){(async()=>{try{
   if(CID){try{
     await new Promise((res,rej)=>{if(window.google&&google.accounts&&google.accounts.id)return res();const sc=document.createElement('script');sc.src='https://accounts.google.com/gsi/client';sc.async=true;sc.onload=res;sc.onerror=rej;document.head.appendChild(sc)});
     google.accounts.id.initialize({client_id:CID,auto_select:false,cancel_on_tap_outside:true,itp_support:true,use_fedcm_for_button:true,
-      callback:async r=>{try{await A.signInWithCredential(auth,A.GoogleAuthProvider.credential(r.credential))}
-        catch(e){app.toast('مقدرتش أسجل الدخول: '+String((e&&(e.code||e.message))||e).replace('auth/','').slice(0,140))}}});
-    const dark=matchMedia('(prefers-color-scheme: dark)').matches;
-    document.querySelectorAll('[data-gsi]').forEach(el=>google.accounts.id.renderButton(el,{theme:dark?'filled_black':'outline',size:'large',shape:'pill',text:'continue_with',locale:'ar',width:Math.min(360,Math.max(240,(el.parentElement.clientWidth||320)))}));
+      callback:async r=>{app.splashMsg('بندخلك…');try{await A.signInWithCredential(auth,A.GoogleAuthProvider.credential(r.credential))}
+        catch(e){app.splashMsg('مقدرتش أسجل الدخول: '+String((e&&(e.code||e.message))||e).replace('auth/','').slice(0,120))}}});
+    const el=document.getElementById('gsiSplash');google.accounts.id.renderButton(el,{theme:'outline',size:'large',shape:'pill',text:'continue_with',locale:'ar',width:Math.min(360,Math.max(240,Math.round(innerWidth-48)))});
     app.setAccount({gsi:true});
-  }catch(e){console.warn('gsi off',e)}}
+  }catch(e){console.warn('gsi off',e);document.getElementById('spFallback').hidden=false}}else{document.getElementById('spFallback').hidden=false}
   A.getRedirectResult(auth).catch(()=>{});
   A.onAuthStateChanged(auth,async u=>{
     if(unsub){unsub();unsub=null}
-    if(!u){user=null;ref=null;app.setAccount({user:null,profile:{},sync:''});return}
+    if(!u){user=null;ref=null;app.setAccount({user:null,profile:{},sync:''});app.signedOut();return}
+    app.splashMsg('بندخلك…');
     user=u;ref=F.doc(db,'users',u.uid);
     app.setAccount({user:{name:u.displayName,email:u.email,photo:u.photoURL},sync:'saving'});
     try{
@@ -866,6 +919,7 @@ if(cfg&&cfg.apiKey&&app){(async()=>{try{
         let r=null;try{r=JSON.parse(d.state||'null')}catch(e){}
         const l=app.get();if(r&&(r.u||0)>(l.u||0)){r.owner=u.uid;app.replace(r)}});
     }catch(e){setSync(navigator.onLine?'error':'offline')}
+    app.splashMsg('');app.signedIn();
   });
 }catch(e){console.warn('cloud off',e)}})();}
 </script>
