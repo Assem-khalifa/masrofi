@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#3b1f5c">
 <title>مصروفي</title>
 <link rel="manifest" href="manifest.json">
-<script>window.FIREBASE_CONFIG={apiKey:"AIzaSyCEAn5MnYjCR4dGDQYSMR-4WHQh9kxZCSA",authDomain:"masrofi-935ce.firebaseapp.com",projectId:"masrofi-935ce",storageBucket:"masrofi-935ce.firebasestorage.app",messagingSenderId:"155618851810",appId:"1:155618851810:web:80fc061bade29994cb17bb"};</script>
+<script>window.FIREBASE_CONFIG={apiKey:"AIzaSyCEAn5MnYjCR4dGDQYSMR-4WHQh9kxZCSA",authDomain:"masrofi-935ce.firebaseapp.com",projectId:"masrofi-935ce",storageBucket:"masrofi-935ce.firebasestorage.app",messagingSenderId:"155618851810",appId:"1:155618851810:web:80fc061bade29994cb17bb",googleClientId:"155618851810-8g95kf1kknlq9hpvfsetse8qj854auvn.apps.googleusercontent.com"};</script>
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
@@ -57,7 +57,8 @@ header b{font-size:18px;font-weight:800}
 .payrow .btn{width:auto;padding:0 22px;min-height:48px}
 .later{border:0;background:none;color:var(--mute);font-size:14px;min-height:40px;margin-top:4px;padding:0}
 .gbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:52px;border:1px solid var(--line);border-radius:16px;background:var(--bg);color:var(--ink);font-weight:700;font-size:16px;box-shadow:0 1px 3px #0000000f}
-.gwrap{margin-top:22px}.or{color:var(--mute);font-size:14px;margin:0 0 8px!important}
+.gwrap{margin-top:22px}
+.gsi{display:flex;justify-content:center;min-height:44px}.or{color:var(--mute);font-size:14px;margin:0 0 8px!important}
 .acc{text-align:center;padding:18px 0 6px}
 .acc h2{font-size:22px;margin:12px 0 6px}.acc p{color:var(--mute);margin:0 0 18px;font-size:15px}
 .avatar{width:72px;height:72px;border-radius:50%;background:var(--soft);color:var(--mute);display:grid;place-items:center;margin:0 auto;overflow:hidden;position:relative}
@@ -186,7 +187,7 @@ textarea{width:100%;min-height:80px;font:13px monospace;border:1px solid var(--l
     <h1>معاك كام دلوقتي؟</h1>
         <input id="startIn" type="number" inputmode="decimal" placeholder="1000" aria-label="المبلغ اللي معاك">
     <button class="btn" id="startBtn">ابدأ</button>
-    <div class="gwrap" data-cloud hidden><button class="gbtn" data-signin><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.8z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-2.9l-3.9-3c-1.1.7-2.5 1.2-4.1 1.2-3.1 0-5.8-2.1-6.7-5H1.3v3.1A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.3 14.3a7.2 7.2 0 0 1 0-4.6V6.6H1.3a12 12 0 0 0 0 10.8z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.3 6.6l4 3.1c.9-2.9 3.6-4.9 6.7-4.9z"/></svg><span>رجّع بياناتك بحساب جوجل</span></button></div>
+    <div class="gwrap" data-cloud hidden><div class="gsi" data-gsi hidden></div><button class="gbtn" data-signin><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.8z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-2.9l-3.9-3c-1.1.7-2.5 1.2-4.1 1.2-3.1 0-5.8-2.1-6.7-5H1.3v3.1A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.3 14.3a7.2 7.2 0 0 1 0-4.6V6.6H1.3a12 12 0 0 0 0 10.8z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.3 6.6l4 3.1c.9-2.9 3.6-4.9 6.7-4.9z"/></svg><span>رجّع بياناتك بحساب جوجل</span></button></div>
   </section>
 
   <main id="app" hidden>
@@ -223,7 +224,7 @@ textarea{width:100%;min-height:80px;font:13px monospace;border:1px solid var(--l
       <section class="acc" id="accOut">
         <div class="avatar big-av"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div>
         <p class="acc-line">احفظ مصاريفك في حسابك</p>
-        <button class="gbtn" data-signin data-cloud hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.8z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-2.9l-3.9-3c-1.1.7-2.5 1.2-4.1 1.2-3.1 0-5.8-2.1-6.7-5H1.3v3.1A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.3 14.3a7.2 7.2 0 0 1 0-4.6V6.6H1.3a12 12 0 0 0 0 10.8z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.3 6.6l4 3.1c.9-2.9 3.6-4.9 6.7-4.9z"/></svg><span>سجّل دخول بجوجل</span></button>
+        <div class="gsi" data-gsi hidden></div><button class="gbtn" data-signin data-cloud hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.8z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-2.9l-3.9-3c-1.1.7-2.5 1.2-4.1 1.2-3.1 0-5.8-2.1-6.7-5H1.3v3.1A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.3 14.3a7.2 7.2 0 0 1 0-4.6V6.6H1.3a12 12 0 0 0 0 10.8z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.3 6.6l4 3.1c.9-2.9 3.6-4.9 6.7-4.9z"/></svg><span>سجّل دخول بجوجل</span></button>
         <p class="note" id="cloudOff">تسجيل الدخول لسه ما اتفعّلش في التطبيق.</p>
       </section>
       <section class="acc" id="accIn" hidden>
@@ -772,6 +773,7 @@ $('setBalBtn').onclick=openSetManual;
 let acct={cloud:false,user:null,profile:{},sync:''};
 function renderAccount(){
   document.querySelectorAll('[data-cloud]').forEach(e=>e.hidden=!acct.cloud);
+  document.querySelectorAll('[data-gsi]').forEach(e=>e.hidden=!acct.gsi);document.querySelectorAll('[data-signin]').forEach(e=>{if(acct.gsi)e.hidden=true});
   $('cloudOff').hidden=acct.cloud;
   const u=acct.user;$('accOut').hidden=!!u;$('accIn').hidden=!u;$('logoutBtn').hidden=!u;
   if(u){const name=acct.profile.name||u.name||'',photo=acct.profile.photo||u.photo||'';
@@ -825,11 +827,22 @@ if(cfg&&cfg.apiKey&&app){(async()=>{try{
     signIn:async()=>{try{await A.signInWithPopup(auth,provider)}catch(e){
       if(e&&(e.code==='auth/popup-blocked'||e.code==='auth/operation-not-supported-in-this-environment'||e.code==='auth/web-storage-unsupported'))return A.signInWithRedirect(auth,provider);
       if(e&&e.code!=='auth/popup-closed-by-user'&&e.code!=='auth/cancelled-popup-request')app.toast('مقدرتش أسجل الدخول: '+String((e&&(e.code||e.message))||e).replace('auth/','').slice(0,140))}},
-    signOut:async()=>{try{if(unsub)unsub();unsub=null;ref=null;await A.signOut(auth)}catch(e){}
+    signOut:async()=>{try{if(unsub)unsub();unsub=null;ref=null;await A.signOut(auth);if(window.google&&google.accounts&&google.accounts.id)google.accounts.id.disableAutoSelect()}catch(e){}
       try{localStorage.removeItem('masrofi-v1')}catch(e){}app.replace({start:null,items:[]});app.toast('سجّلت خروج')},
     saveProfile:async(p)=>{Object.assign(profile,p);app.setAccount({profile:{...profile}});if(ref){try{await F.setDoc(ref,{profile},{merge:true})}catch(e){}}}
   };
   app.setAccount({cloud:true});
+  // Google Identity Services: sign in without Firebase's popup/iframe helper
+  const CID=cfg.googleClientId;
+  if(CID){try{
+    await new Promise((res,rej)=>{if(window.google&&google.accounts&&google.accounts.id)return res();const sc=document.createElement('script');sc.src='https://accounts.google.com/gsi/client';sc.async=true;sc.onload=res;sc.onerror=rej;document.head.appendChild(sc)});
+    google.accounts.id.initialize({client_id:CID,auto_select:false,cancel_on_tap_outside:true,itp_support:true,use_fedcm_for_button:true,
+      callback:async r=>{try{await A.signInWithCredential(auth,A.GoogleAuthProvider.credential(r.credential))}
+        catch(e){app.toast('مقدرتش أسجل الدخول: '+String((e&&(e.code||e.message))||e).replace('auth/','').slice(0,140))}}});
+    const dark=matchMedia('(prefers-color-scheme: dark)').matches;
+    document.querySelectorAll('[data-gsi]').forEach(el=>google.accounts.id.renderButton(el,{theme:dark?'filled_black':'outline',size:'large',shape:'pill',text:'continue_with',locale:'ar',width:Math.min(360,Math.max(240,(el.parentElement.clientWidth||320)))}));
+    app.setAccount({gsi:true});
+  }catch(e){console.warn('gsi off',e)}}
   A.getRedirectResult(auth).catch(()=>{});
   A.onAuthStateChanged(auth,async u=>{
     if(unsub){unsub();unsub=null}
