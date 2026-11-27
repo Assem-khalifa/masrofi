@@ -127,6 +127,11 @@ header b{font-size:18px;font-weight:800}
 .gprev{margin:0;background:var(--soft);border-radius:12px;padding:10px 12px;font-size:15px;line-height:1.7}
 .gprev:empty{display:none}.gprev b{white-space:nowrap}
 .amt.save{color:#7a5af8}
+.hgoal{display:block;width:100%;text-align:start;border:0;background:var(--soft);border-radius:16px;padding:12px 14px;margin:4px 0 8px;cursor:pointer}
+.hg-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;font-weight:700}
+.hg-top b{color:#7a5af8}
+.hgoal small{display:block;color:var(--mute);font-size:13px;margin-top:6px}
+.gbar.sm{height:8px;background:var(--bg)}.gbar.sm i{background:#7a5af8}
 .dayh{display:flex;justify-content:space-between;color:var(--mute);font-size:14px;font-weight:600;padding:18px 0 4px}
 .row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
 .dot{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;font-weight:800;color:#fff;flex:none;font-size:15px}
@@ -283,6 +288,7 @@ textarea{width:100%;min-height:80px;font:13px monospace;border:1px solid var(--l
         <div class="payhead"><b id="saveTx">تحوّش للهدف؟</b><button class="later" id="saveLater">بعدين</button></div>
         <div class="payrow"><input id="saveAmt" type="number" inputmode="decimal" aria-label="مبلغ التحويش"><button class="btn" id="saveNow" style="background:#7a5af8">حوّش</button></div>
       </section>
+      <button class="hgoal" id="hGoal" hidden><div class="hg-top"><span id="hgName"></span><b id="hgPct"></b></div><div class="gbar sm"><i id="hgBar"></i></div><small id="hgTx"></small></button>
       <div class="run" id="run" hidden></div>
       <section id="list"></section>
     </div>
@@ -368,6 +374,7 @@ textarea{width:100%;min-height:80px;font:13px monospace;border:1px solid var(--l
     <div><span class="lbl">عايز تشتريه خلال</span><div class="chips" id="gMonths"><button type="button" data-m="3">٣ شهور</button><button type="button" data-m="6">٦ شهور</button><button type="button" data-m="12">سنة</button><button type="button" data-m="18">سنة ونص</button><button type="button" data-m="24">سنتين</button></div></div>
     <label>مرتبك في الشهر<input id="gSalary" type="number" inputmode="decimal" placeholder="15000" required></label>
     <label class="chk"><input type="checkbox" id="gInfl" checked> احسب زيادة الأسعار (حوالي ١٢٪ في السنة)</label>
+    <label>تقدر تحوّش أكتر أو أقل؟ اكتب المبلغ في الشهر<input id="gMonthly" type="number" inputmode="decimal" placeholder="اختياري"></label>
     <p class="gprev" id="gPrev"></p>
     <button class="btn coral" id="gSave">احفظ الهدف</button>
     <button type="button" class="later" data-close style="justify-self:center">إلغاء</button>
@@ -611,6 +618,7 @@ function render0(){
     mOut=sum(out.filter(i=>{const x=new Date(i.t);return x.getMonth()===now.getMonth()&&x.getFullYear()===now.getFullYear()})),
     run=$('run');run.hidden=true;
     const gc=goalCalc();
+    $('hGoal').hidden=!gc;if(gc){$('hgName').textContent=st.goal.name||'هدفي';$('hgPct').textContent=Math.floor(gc.pct)+'٪';$('hgBar').style.width=gc.pct+'%';$('hgTx').textContent=money(gc.saved)+' من '+money(gc.target)+' ج.م'}
     if(gc&&st.goal.salary){const today=sum(out.filter(i=>dayKey(i.t)===dayKey(now))),allow=(gc.budget-(mOut-today))/(D-d+1),r=Math.round(allow-today);run.hidden=false;
       if(r>=0){run.className='run ok';run.textContent='مسموحلك تصرف '+money(r)+' النهارده'}else{run.className='run warn';run.textContent='عدّيت حدّك النهارده بـ '+money(-r)}}
     else if(d>=3&&mOut>0&&left>0){const avg=mOut/d;run.hidden=false;
@@ -953,7 +961,7 @@ function goalCalc(){const g=st.goal;if(!g||!g.price)return null;
   const target=Math.round(g.inflation?g.price*Math.pow(1+INFL,total/12):g.price);
   const saves=st.items.filter(i=>i.type==='save'),saved=(g.initial||0)+sum(saves);
   const savedMonth=sum(saves.filter(i=>{const x=new Date(i.t);return x.getMonth()===n.getMonth()&&x.getFullYear()===n.getFullYear()}));
-  const remStart=Math.max(0,target-(saved-savedMonth)),perMonth=Math.ceil(remStart/monthsLeft/50)*50;
+  const remStart=Math.max(0,target-(saved-savedMonth)),perMonth=g.monthly?Math.min(g.monthly,Math.ceil(remStart/50)*50):Math.ceil(remStart/monthsLeft/50)*50;
   const budget=Math.max(0,(g.salary||0)-perMonth);
   // how much do you really spend per month? (last 90 days, needs 2 weeks of data)
   const outs=st.items.filter(i=>i.type==='out'&&i.t>now-90*864e5),first=outs.length?Math.min(...outs.map(i=>i.t)):now,span=Math.min(90,(now-first)/864e5);
@@ -995,18 +1003,27 @@ function openGoalSheet(pre){const g=Object.assign({},st.goal||{},pre||{});
   $('gName').value=g.name||'';$('gPrice').value=g.price||'';$('gInit').value=g.initial||'';
   const lastSal=[...st.items].filter(i=>i.type==='in').sort((a,b)=>b.t-a.t)[0];
   $('gSalary').value=g.salary||(lastSal?lastSal.amt:'');$('gInfl').checked=g.inflation!==false;
-  gMonths=g.months||12;drawChips();gPreview();open('goalSheet');}
+  gMonths=g.monthly?12:(g.months||12);$('gMonthly').value=g.monthly||'';drawChips();gPreview();open('goalSheet');}
 function drawChips(){document.querySelectorAll('#gMonths button').forEach(b=>b.classList.toggle('on',+b.dataset.m===gMonths))}
-function gPreview(){const price=parseFloat($('gPrice').value)||0,init=parseFloat($('gInit').value)||0,sal=parseFloat($('gSalary').value)||0;
+function monthsFor(price,init,monthly,infl){if(!(monthly>0))return null;for(let m=1;m<=600;m++){const t=infl?price*Math.pow(1+INFL,m/12):price;if(init+monthly*m>=t)return m}return null}
+function gPreview(){const price=parseFloat($('gPrice').value)||0,init=parseFloat($('gInit').value)||0,sal=parseFloat($('gSalary').value)||0,mine=parseFloat($('gMonthly').value)||0;
   if(!price){$('gPrev').textContent='';return}
+  if(mine>0){const m=monthsFor(price,init,mine,$('gInfl').checked);
+    if(!m){$('gPrev').innerHTML='المبلغ ده قليل، مش هيوصلك للهدف';return}
+    const d=gMonths-m;
+    $('gPrev').innerHTML=`هتحوّش <b>${esc(money(mine))} في الشهر</b> وهتوصل خلال <b>${monthsTxt(m)}</b>`+(d>0?` 🎉 يعني بدري ${monthsTxt(d)}`:d<0?` (متأخر ${monthsTxt(-d)} عن اللي اخترته)`:'')+(sal?`<br>ومسموحلك تصرف <b>${esc(money(Math.max(0,sal-mine)))}</b> في الشهر`:'');
+    document.querySelectorAll('#gMonths button').forEach(b=>b.classList.remove('on'));return}
+  drawChips();
   const target=Math.round($('gInfl').checked?price*Math.pow(1+INFL,gMonths/12):price),per=Math.ceil(Math.max(0,target-init)/gMonths/50)*50;
   $('gPrev').innerHTML=($('gInfl').checked?`سعره المتوقع وقتها حوالي <b>${esc(money(target))}</b><br>`:'')+`هتحوّش <b>${esc(money(per))} في الشهر</b>`+(sal?`، ومسموحلك تصرف <b>${esc(money(Math.max(0,sal-per)))}</b>`:'');}
-$('gMonths').onclick=e=>{const b=e.target.closest('[data-m]');if(!b)return;gMonths=+b.dataset.m;drawChips();gPreview()};
-['gPrice','gInit','gSalary','gInfl'].forEach(id=>$(id).addEventListener('input',gPreview));
+$('gMonths').onclick=e=>{const b=e.target.closest('[data-m]');if(!b)return;gMonths=+b.dataset.m;$('gMonthly').value='';drawChips();gPreview()};
+['gPrice','gInit','gSalary','gInfl','gMonthly'].forEach(id=>$(id).addEventListener('input',gPreview));
 $('goalForm').onsubmit=e=>{e.preventDefault();const price=parseFloat($('gPrice').value),sal=parseFloat($('gSalary').value);
   if(!(price>0)){$('gPrice').focus();return}if(!(sal>0)){$('gSalary').focus();return}
-  const was=st.goal;
-  commit(()=>{st.goal={name:$('gName').value.trim()||'هدفي',price,initial:parseFloat($('gInit').value)||0,months:gMonths,salary:sal,inflation:$('gInfl').checked,created:was&&was.months===gMonths?was.created:Date.now()}},was?'اتعدّل الهدف':'اتحفظ الهدف 🎯');
+  const was=st.goal,init=parseFloat($('gInit').value)||0,mine=parseFloat($('gMonthly').value)||0,infl=$('gInfl').checked;
+  let months=gMonths,monthly=null;
+  if(mine>0){const m=monthsFor(price,init,mine,infl);if(!m){$('gMonthly').focus();return}months=m;monthly=mine}
+  commit(()=>{st.goal={name:$('gName').value.trim()||'هدفي',price,initial:init,months,monthly,salary:sal,inflation:infl,created:was&&was.months===months?was.created:Date.now()}},was?'اتعدّل الهدف':'اتحفظ الهدف 🎯');
   setTab('goal')};
 function milestone(before,after){const ms=[25,50,75,100].filter(m=>before<m&&after>=m);if(ms.length){const m=ms[ms.length-1];setTimeout(()=>toast(m===100?'🎉 وصلت لهدفك!':'🎉 وصلت لـ '+m+'٪ من هدفك',false),400)}}
 function doSave(amt){if(!(amt>0))return;const b=goalCalc().pct;
@@ -1026,6 +1043,7 @@ function drawSave(){const c=goalCalc();
   $('rvList').innerHTML=`<input class="bigin" id="saveVal" type="number" inputmode="decimal" value="${esc(pending.amt)}" aria-label="المبلغ">`;
   $('saveBtn').textContent='حوّش';$('saveBtn').className='btn';$('saveBtn').disabled=false;updSaveProj()}
 function updSaveProj(){const c=goalCalc(),v=parseFloat(($('saveVal')||{}).value)||0;$('proj').innerHTML='الباقي هيبقى <b>'+esc(money(leftOf(st)-v))+' ج.م</b> · الهدف هيبقى <b>'+Math.min(100,Math.floor((c.saved+v)/c.target*100))+'٪</b>'}
+$('hGoal').onclick=()=>setTab('goal');
 $('saveNow').onclick=()=>doSave(parseFloat($('saveAmt').value));
 $('saveLater').onclick=()=>{try{localStorage.setItem('masrofi-save-snooze',dayKey(new Date()))}catch(e){}render()};
 load();render();renderAccount();
