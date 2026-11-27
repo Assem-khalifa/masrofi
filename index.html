@@ -33,6 +33,9 @@ header b{font-size:18px;font-weight:800}
 .icon-btn svg{width:22px;height:22px}
 .bal{padding:22px 0 18px;border-bottom:1px solid var(--line)}
 .bal small{color:var(--mute);font-size:15px}
+.balbtn{display:block;width:100%;border:0;background:none;padding:0;text-align:start}
+.pen{display:inline-flex;align-items:center;gap:4px;margin-inline-start:8px;background:var(--soft);color:var(--plum2);font-weight:600;font-size:13px;padding:2px 10px;border-radius:99px;vertical-align:middle}
+.pen svg{width:14px;height:14px}
 .big{font-size:clamp(46px,15vw,64px);font-weight:800;line-height:1.05;margin:2px 0 10px;white-space:nowrap}
 .big span{font-size:20px;font-weight:600;color:var(--mute)}
 .big.neg{color:var(--coral)}
@@ -61,7 +64,7 @@ header b{font-size:18px;font-weight:800}
 .x{border:0;background:none;color:var(--mute);width:40px;height:40px;border-radius:10px;font-size:22px;flex:none}
 .empty{text-align:center;color:var(--mute);padding:40px 12px}
 .empty b{display:block;color:var(--ink);font-size:18px;margin-bottom:4px}
-.dock{position:fixed;inset-inline:12px;bottom:max(12px,env(safe-area-inset-bottom));max-width:496px;margin:auto;padding:6px 10px;display:grid;grid-template-columns:1fr 1fr auto 1fr 1fr;align-items:center;justify-items:center;padding-inline:4px;
+.dock{position:fixed;inset-inline:12px;bottom:max(12px,env(safe-area-inset-bottom));max-width:496px;margin:auto;padding:6px 10px;display:grid;grid-template-columns:1fr 1fr auto 2fr;align-items:center;justify-items:center;padding-inline:4px;
 background:light-dark(rgba(255,255,255,.96),rgba(30,26,40,.97));-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);
 border:1px solid var(--line);border-radius:26px;box-shadow:0 10px 30px -10px light-dark(#3b1f5c40,#000c),0 1px 3px light-dark(#0000000f,#0006);z-index:5}
 .tab{border:0;background:none;color:var(--mute);display:grid;justify-items:center;gap:2px;font-size:12px;font-weight:600;min-width:0;width:100%;min-height:52px;padding:4px 0}
@@ -167,8 +170,10 @@ textarea{width:100%;min-height:80px;font:13px monospace;border:1px solid var(--l
     </header>
     <div id="homeView">
       <section class="bal">
-        <small>الباقي معاك</small>
-        <div class="big" id="left">0</div>
+        <button class="balbtn" id="editBal" aria-label="عدّل الباقي معاك">
+          <small>الباقي معاك <span class="pen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>عدّل</span></small>
+          <div class="big" id="left">0</div>
+        </button>
         <div class="meter"><i id="meter"></i></div>
         <div class="sub"><span>النهارده <b id="today">0</b></span><span>الشهر ده <b id="month">0</b></span></div>
       </section>
@@ -200,7 +205,6 @@ textarea{width:100%;min-height:80px;font:13px monospace;border:1px solid var(--l
   <button class="tab on" data-tab="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg><span>الرئيسية</span></button>
   <button class="tab" data-tab="stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 20V11M12 20V5M19 20v-6"/></svg><span>الإحصائيات</span></button>
   <button class="mic" id="micBtn" aria-label="سجّل بصوتك"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
-  <button class="tab" id="kbBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h.01M11 10h.01M15 10h.01M8 14h8"/></svg><span>اكتب</span></button>
   <button class="tab" id="setBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg><span>الإعدادات</span></button>
 </nav>
 
@@ -210,7 +214,7 @@ textarea{width:100%;min-height:80px;font:13px monospace;border:1px solid var(--l
   <p id="lsSub">مثلاً: «صرفت ١٠٠ أكل و٢٠ مواصلات» · «ضيف ٥٠٠٠ على الرصيد» · «امسح آخر حاجة» · «عدّل الأكل لـ ١٥٠»</p>
   <div class="pulse" id="pulse"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></div>
   <div class="live" id="live"><i>…</i></div>
-  <div class="btns"><button class="btn coral" id="doneBtn">خلصت</button><button class="btn ghost" id="cancelBtn">إلغاء</button><button class="later" id="toType" style="justify-self:center">أو اكتب بدل ما تتكلم</button></div>
+  <div class="btns"><button class="btn coral" id="doneBtn">خلصت</button><button class="btn ghost" id="cancelBtn">إلغاء</button></div>
 </div></div>
 
 <!-- type sheet -->
@@ -236,6 +240,7 @@ textarea{width:100%;min-height:80px;font:13px monospace;border:1px solid var(--l
   <h2>الإعدادات</h2>
   <p>كل حاجة تقدر تعملها بصوتك: تضيف فلوس، تسجّل مصاريف، تمسح، تعدّل، أو تقول «تراجع».</p>
   <div class="btns">
+    <button class="btn ghost" id="setBalBtn">عدّل الباقي معاك</button>
     <button class="btn ghost" id="copyBtn">انسخ نسخة احتياطية</button>
     <textarea id="restore" placeholder="أو الصق نسخة احتياطية هنا" aria-label="نسخة احتياطية"></textarea>
     <button class="btn ghost" id="restoreBtn">استرجع النسخة</button>
@@ -448,7 +453,7 @@ function render(){
   $('setup').hidden=ready;$('app').hidden=!ready;$('dock').hidden=!ready;
   if(!ready)return;
   const out=st.items.filter(i=>i.type==='out'),total=st.start+sum(st.items.filter(i=>i.type==='in')),left=total-sum(out);
-  $('left').innerHTML=esc(money(left))+' <span>ج.م</span>';$('left').classList.toggle('neg',left<0);
+  $('left').innerHTML='<bdi dir="ltr">'+esc(money(left))+'</bdi> <span>ج.م</span>';$('left').classList.toggle('neg',left<0);
   const pct=total>0?Math.max(0,Math.min(100,left/total*100)):0;
   $('meter').style.width=pct+'%';$('meter').className=pct<20?'low':'';
   const now=new Date(),tk=dayKey(now);
@@ -459,7 +464,7 @@ function render(){
   {const D=new Date(now.getFullYear(),now.getMonth()+1,0).getDate(),d=now.getDate(),
     mOut=sum(out.filter(i=>{const x=new Date(i.t);return x.getMonth()===now.getMonth()&&x.getFullYear()===now.getFullYear()})),
     rest=D-d,run=$('run');run.hidden=false;
-    if(left<=0){run.className='run warn';run.innerHTML='فلوسك خلصت. ضيف فلوس بصوتك، قول مثلاً «ضيف ٥٠٠٠ على الرصيد».'}
+    if(left<=0){run.className='run warn';run.innerHTML='فلوسك خلصت. دوس على «عدّل» فوق واكتب المبلغ اللي معاك، أو قول «ضيف ٥٠٠٠ على الرصيد».'}
     else if(d<3||mOut===0){run.className='run wait';run.innerHTML='من يوم ٣ في الشهر هقولك فلوسك هتكفيك لآخر الشهر ولا لأ.'}
     else{const avg=mOut/d,need=avg*rest;
       if(left>=need){run.className='run ok';run.innerHTML='✓ بالمعدل ده فلوسك <b>هتكفيك لآخر الشهر</b>'+(rest>0?'، وهيفضل معاك حوالي <b>'+esc(money(Math.round(left-need)))+' ج.م</b>':'')+'<small>متوسط صرفك '+esc(money(Math.round(avg)))+' ج.م في اليوم</small>'}
@@ -499,7 +504,7 @@ const leftOf=s2=>s2.start+sum(s2.items.filter(i=>i.type==='in'))-sum(s2.items.fi
 /* understand what was said, then confirm */
 let pending=null;
 function handleText(text){
-  heardText=text;pending=parseCommand(text,st.items);
+  heardText=text;pending=parseCommand(text,st.items);$('heard').hidden=false;$('againBtn').hidden=false;
   $('heard').textContent='سمعتك بتقول: «'+text+'»';
   if(pending.kind==='undo'){open(null);doUndo();return}
   if(pending.kind==='spend'){draft=pending.items;draftYest=pending.yesterday;
@@ -546,8 +551,8 @@ function updDel(){
   $('saveBtn').textContent=ids.length?'امسح ('+ids.length+')':'علّم حاجة الأول';$('saveBtn').disabled=!ids.length;$('saveBtn').className='btn coral';proj(leftOf(after));
 }
 function drawSet(){
-  $('saveBtn').hidden=false;$('rvTitle').textContent='تظبط الباقي معاك';
-  $('rvList').innerHTML=`<p style="margin:6px 0 10px">الباقي دلوقتي ${esc(money(leftOf(st)))} ج.م. عايزه يبقى:</p><input class="bigin" id="setVal" type="number" inputmode="decimal" value="${esc(pending.value)}" aria-label="الباقي الجديد">`;
+  $('saveBtn').hidden=false;$('rvTitle').textContent='عدّل الباقي معاك';
+  $('rvList').innerHTML=`<p style="margin:6px 0 10px">الباقي دلوقتي <bdi dir="ltr">${esc(money(leftOf(st)))}</bdi> ج.م. اكتب المبلغ اللي معاك فعلاً:</p><input class="bigin" id="setVal" type="number" inputmode="decimal" value="${esc(pending.value)}" aria-label="الباقي الجديد">`;
   $('saveBtn').textContent='تمام، خليه كده';$('saveBtn').className='btn';$('saveBtn').disabled=false;proj(pending.value);
 }
 function drawEdit(){
@@ -626,8 +631,7 @@ $('cancelBtn').onclick=()=>{stopRec(true);open(null)};
 
 /* typing fallback */
 function openType(msg){open('typeSheet');if(msg)toast(msg,false);setTimeout(()=>$('typeIn').focus(),150)}
-$('kbBtn').onclick=()=>openType();
-$('toType').onclick=()=>{stopRec(true);openType()};
+
 $('typeForm').onsubmit=e=>{e.preventDefault();const v=$('typeIn').value.trim();if(!v)return;$('typeIn').value='';handleText(v)};
 
 /* list delete + undo */
@@ -738,6 +742,10 @@ $('payBtn').onclick=()=>{const v=parseFloat($('payAmt').value);if(!(v>0)){$('pay
   const mk=new Date().getFullYear()+'-'+new Date().getMonth();try{localStorage.setItem('masrofi-pay-snooze','done-'+mk)}catch(e){}
   $('payAmt').value='';commit(()=>st.items.push({id:Date.now().toString(36)+'p',amt:v,note:'المرتب',cat:null,type:'in',t:Date.now()}),'اتضاف '+money(v)+' ج.م للرصيد')};
 $('payLater').onclick=()=>{try{localStorage.setItem('masrofi-pay-snooze',dayKey(new Date()))}catch(e){}render()};
+
+function openSetManual(){pending={kind:'set',value:Math.round(leftOf(st)*100)/100};$('heard').hidden=true;$('againBtn').hidden=true;drawSet();open('reviewSheet');setTimeout(()=>{const i=$('setVal');if(i){i.focus();i.select()}},200)}
+$('editBal').onclick=openSetManual;
+$('setBalBtn').onclick=openSetManual;
 load();render();
 }
 </script>
