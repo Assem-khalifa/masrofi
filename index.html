@@ -41,6 +41,17 @@ header b{font-size:18px;font-weight:800}
 .meter i.low{background:var(--coral)}
 .sub{display:flex;gap:18px;margin-top:10px;color:var(--mute);font-size:14px;flex-wrap:wrap}
 .sub b{color:var(--ink);white-space:nowrap}
+.run{margin-top:14px;border-radius:16px;padding:12px 14px;font-size:15px;line-height:1.5}
+.run b{white-space:nowrap}
+.run.ok{background:light-dark(#e7f7f0,#10261e);color:light-dark(#0b5e43,#8fe3c0)}
+.run.warn{background:light-dark(#fff0ee,#2c1513);color:light-dark(#a4291f,#ffb3aa)}
+.run.wait{background:var(--soft);color:var(--mute)}
+.run small{display:block;opacity:.85;font-size:13px;margin-top:2px}
+.pay{margin-top:14px;border:1px solid var(--line);border-radius:18px;padding:14px;background:var(--soft)}
+.pay b{font-size:17px}.pay p{margin:2px 0 10px;color:var(--mute);font-size:14px}
+.payrow{display:flex;gap:8px}.payrow input{flex:1;min-height:48px;border:1px solid var(--line);border-radius:12px;background:var(--bg);padding:0 12px;font-size:18px;font-weight:800;text-align:center}
+.payrow .btn{width:auto;padding:0 22px;min-height:48px}
+.later{border:0;background:none;color:var(--mute);font-size:14px;min-height:40px;margin-top:4px;padding:0}
 .dayh{display:flex;justify-content:space-between;color:var(--mute);font-size:14px;font-weight:600;padding:18px 0 4px}
 .row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
 .dot{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;font-weight:800;color:#fff;flex:none;font-size:15px}
@@ -50,12 +61,13 @@ header b{font-size:18px;font-weight:800}
 .x{border:0;background:none;color:var(--mute);width:40px;height:40px;border-radius:10px;font-size:22px;flex:none}
 .empty{text-align:center;color:var(--mute);padding:40px 12px}
 .empty b{display:block;color:var(--ink);font-size:18px;margin-bottom:4px}
-.dock{position:fixed;inset-inline:12px;bottom:max(12px,env(safe-area-inset-bottom));max-width:496px;margin:auto;padding:6px 10px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;justify-items:center;
+.dock{position:fixed;inset-inline:12px;bottom:max(12px,env(safe-area-inset-bottom));max-width:496px;margin:auto;padding:6px 10px;display:grid;grid-template-columns:1fr 1fr auto 1fr 1fr;align-items:center;justify-items:center;padding-inline:4px;
 background:light-dark(rgba(255,255,255,.96),rgba(30,26,40,.97));-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);
 border:1px solid var(--line);border-radius:26px;box-shadow:0 10px 30px -10px light-dark(#3b1f5c40,#000c),0 1px 3px light-dark(#0000000f,#0006);z-index:5}
-.tab{border:0;background:none;color:var(--mute);display:grid;justify-items:center;gap:2px;font-size:13px;font-weight:600;min-width:84px;min-height:52px;padding:4px 0}
+.tab{border:0;background:none;color:var(--mute);display:grid;justify-items:center;gap:2px;font-size:12px;font-weight:600;min-width:0;width:100%;min-height:52px;padding:4px 0}
+.tab span{white-space:nowrap}
 .tab svg{width:24px;height:24px}
-.mic{width:72px;height:72px;border-radius:50%;border:0;background:var(--coral);color:#fff;display:grid;place-items:center;box-shadow:0 10px 24px -8px #ff5a4eaa,0 0 0 6px var(--bg);margin-top:-30px}
+.mic{width:66px;height:66px;margin-inline:4px;border-radius:50%;border:0;background:var(--coral);color:#fff;display:grid;place-items:center;box-shadow:0 10px 24px -8px #ff5a4eaa,0 0 0 6px var(--bg);margin-top:-30px}
 .mic svg{width:32px;height:32px}
 .tab.on{color:var(--plum2)}
 .tab.on::after{content:"";width:18px;height:3px;border-radius:3px;background:currentColor;margin-top:2px}
@@ -84,6 +96,9 @@ border:1px solid var(--line);border-radius:26px;box-shadow:0 10px 30px -10px lig
 .axis{display:flex;gap:3px;color:var(--mute);font-size:11px;margin-top:4px}
 .axis span{flex:1;text-align:center;min-width:0;overflow:visible;white-space:nowrap}
 .cap{min-height:24px;font-size:14px;color:var(--mute);margin-top:8px}.cap b{color:var(--ink)}
+.notes{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+.notes li{background:var(--soft);border-radius:14px;padding:10px 14px;font-size:15px;line-height:1.6}
+.notes b{white-space:nowrap}
 .tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .tile{background:var(--soft);border-radius:16px;padding:12px 14px}
 .tile small{color:var(--mute);font-size:13px;display:block}
@@ -148,10 +163,7 @@ textarea{width:100%;min-height:80px;font:13px monospace;border:1px solid var(--l
   <main id="app" hidden>
     <header>
       <b id="hTitle">مصروفي</b>
-      <div style="display:flex;gap:8px">
-        <button class="icon-btn" id="kbBtn" aria-label="اكتب بدل ما تتكلم"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h.01M11 10h.01M15 10h.01M8 14h8"/></svg></button>
-        <button class="icon-btn" id="setBtn" aria-label="الإعدادات"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
-      </div>
+
     </header>
     <div id="homeView">
       <section class="bal">
@@ -160,6 +172,13 @@ textarea{width:100%;min-height:80px;font:13px monospace;border:1px solid var(--l
         <div class="meter"><i id="meter"></i></div>
         <div class="sub"><span>النهارده <b id="today">0</b></span><span>الشهر ده <b id="month">0</b></span></div>
       </section>
+      <section class="pay" id="pay" hidden>
+        <b>شهر جديد! قبضت؟</b>
+        <p id="payTx">ضيف مرتبك على الرصيد عشان الحسابات تبقى مظبوطة.</p>
+        <div class="payrow"><input id="payAmt" type="number" inputmode="decimal" placeholder="المبلغ" aria-label="مبلغ المرتب"><button class="btn green" id="payBtn">ضيف</button></div>
+        <button class="later" id="payLater">لسه، فكرني بكرة</button>
+      </section>
+      <div class="run" id="run" hidden></div>
       <section id="list"></section>
     </div>
     <div id="statsView" hidden>
@@ -179,8 +198,10 @@ textarea{width:100%;min-height:80px;font:13px monospace;border:1px solid var(--l
 <div class="hint" id="hint" hidden>دوس على المايك وقول صرفت إيه</div>
 <nav class="dock" id="dock" hidden>
   <button class="tab on" data-tab="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg><span>الرئيسية</span></button>
-  <button class="mic" id="micBtn" aria-label="سجّل بصوتك"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
   <button class="tab" data-tab="stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 20V11M12 20V5M19 20v-6"/></svg><span>الإحصائيات</span></button>
+  <button class="mic" id="micBtn" aria-label="سجّل بصوتك"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+  <button class="tab" id="kbBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h.01M11 10h.01M15 10h.01M8 14h8"/></svg><span>اكتب</span></button>
+  <button class="tab" id="setBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg><span>الإعدادات</span></button>
 </nav>
 
 <!-- listening sheet -->
@@ -189,7 +210,7 @@ textarea{width:100%;min-height:80px;font:13px monospace;border:1px solid var(--l
   <p id="lsSub">مثلاً: «صرفت ١٠٠ أكل و٢٠ مواصلات» · «ضيف ٥٠٠٠ على الرصيد» · «امسح آخر حاجة» · «عدّل الأكل لـ ١٥٠»</p>
   <div class="pulse" id="pulse"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></div>
   <div class="live" id="live"><i>…</i></div>
-  <div class="btns"><button class="btn coral" id="doneBtn">خلصت</button><button class="btn ghost" id="cancelBtn">إلغاء</button></div>
+  <div class="btns"><button class="btn coral" id="doneBtn">خلصت</button><button class="btn ghost" id="cancelBtn">إلغاء</button><button class="later" id="toType" style="justify-self:center">أو اكتب بدل ما تتكلم</button></div>
 </div></div>
 
 <!-- type sheet -->
@@ -434,6 +455,25 @@ function render(){
   $('today').textContent=money(sum(out.filter(i=>dayKey(i.t)===tk)))+' ج.م';
   $('month').textContent=money(sum(out.filter(i=>{const d=new Date(i.t);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()})))+' ج.م';
   if(typeof renderStats==='function'&&tab==='stats')renderStats();
+  // will the money last until the end of the month?
+  {const D=new Date(now.getFullYear(),now.getMonth()+1,0).getDate(),d=now.getDate(),
+    mOut=sum(out.filter(i=>{const x=new Date(i.t);return x.getMonth()===now.getMonth()&&x.getFullYear()===now.getFullYear()})),
+    rest=D-d,run=$('run');run.hidden=false;
+    if(left<=0){run.className='run warn';run.innerHTML='فلوسك خلصت. ضيف فلوس بصوتك، قول مثلاً «ضيف ٥٠٠٠ على الرصيد».'}
+    else if(d<3||mOut===0){run.className='run wait';run.innerHTML='من يوم ٣ في الشهر هقولك فلوسك هتكفيك لآخر الشهر ولا لأ.'}
+    else{const avg=mOut/d,need=avg*rest;
+      if(left>=need){run.className='run ok';run.innerHTML='✓ بالمعدل ده فلوسك <b>هتكفيك لآخر الشهر</b>'+(rest>0?'، وهيفضل معاك حوالي <b>'+esc(money(Math.round(left-need)))+' ج.م</b>':'')+'<small>متوسط صرفك '+esc(money(Math.round(avg)))+' ج.م في اليوم</small>'}
+      else{const days=Math.floor(left/avg),endDay=d+days,per=Math.floor(left/(rest+1));
+        run.className='run warn';run.innerHTML='⚠ بالمعدل ده فلوسك <b>هتخلص حوالي يوم '+endDay+'</b> قبل آخر الشهر'+'<small>عشان تكفيك، حاول متصرفش أكتر من <b>'+esc(money(per))+' ج.م</b> في اليوم (دلوقتي بتصرف '+esc(money(Math.round(avg)))+')</small>'}}}
+  // first days of the month: ask about salary
+  {let snooze='';try{snooze=localStorage.getItem('masrofi-pay-snooze')||''}catch(e){}
+    const mk=now.getFullYear()+'-'+now.getMonth(),dk2=dayKey(now);
+    const gotIn=st.items.some(i=>i.type==='in'&&new Date(i.t).getMonth()===now.getMonth()&&new Date(i.t).getFullYear()===now.getFullYear());
+    const show=now.getDate()<=7&&!gotIn&&snooze!==dk2&&snooze!=='done-'+mk;
+    $('pay').hidden=!show;if(show&&$('run').classList.contains('wait'))$('run').hidden=true;
+    if(show){const lastSal=[...st.items].filter(i=>i.type==='in').sort((a,b)=>b.t-a.t)[0];
+      if(lastSal&&!$('payAmt').value)$('payAmt').value=lastSal.amt;
+      $('payTx').textContent=lastSal?'آخر مرة ضفت '+money(lastSal.amt)+' ج.م. عدّل المبلغ لو اتغير ودوس ضيف.':'ضيف مرتبك على الرصيد عشان الحسابات تبقى مظبوطة.';}}
   const items=[...st.items].sort((a,b)=>b.t-a.t);
   $('hint').hidden=items.length>0||tab!=='home';
   if(!items.length){$('list').innerHTML='<div class="empty"><b>لسه مسجلتش حاجة</b>دوس على المايك وقول مثلاً:<br>«صرفت ١٠٠ أكل و٢٠ مواصلات»</div>';return}
@@ -587,6 +627,7 @@ $('cancelBtn').onclick=()=>{stopRec(true);open(null)};
 /* typing fallback */
 function openType(msg){open('typeSheet');if(msg)toast(msg,false);setTimeout(()=>$('typeIn').focus(),150)}
 $('kbBtn').onclick=()=>openType();
+$('toType').onclick=()=>{stopRec(true);openType()};
 $('typeForm').onsubmit=e=>{e.preventDefault();const v=$('typeIn').value.trim();if(!v)return;$('typeIn').value='';handleText(v)};
 
 /* list delete + undo */
@@ -645,6 +686,20 @@ function renderStats(){
     return `<button class="cbar" data-cat="${c.k}" aria-expanded="${open}"><div class="top"><span>${esc(ci[0])}<small>${pc}٪</small></span><b>${esc(money(c.v))} ج.م</b></div><div class="tr"><i style="width:${c.v/mx*100}%;background:${ci[1]}"></i></div></button>`+
     (open?'<div class="cdet">'+c.a.sort((x,y)=>y.amt-x.amt).map(i=>`<div class="row">${rowHtml(i)}</div>`).join('')+'</div>':'')}).join('')+'</section>';
 
+  // notes about where the money goes (week / month / year)
+  if(period!=='day'){
+    const pcats={};outsIn(r.pa,r.pb).forEach(i=>{const k=i.cat==null?5:i.cat;pcats[k]=(pcats[k]||0)+i.amt});
+    const pname={week:'الأسبوع اللي فات',month:'الشهر اللي فات',year:'السنة اللي فاتت'}[period];
+    const notes=[],top=cl[0],tn=(CATS[top.k]||CATS[5])[0],tp=Math.round(top.v/total*100);
+    notes.push(`أكتر حاجة بتصرف عليها <b>${esc(tn)}</b>: ${esc(money(top.v))} ج.م، يعني <b>${tp}٪</b> من مصاريفك.`);
+    const ups=cl.filter(c=>pcats[c.k]>0&&c.v-pcats[c.k]>=Math.max(100,total*0.03)).map(c=>({c,d:Math.round((c.v-pcats[c.k])/pcats[c.k]*100)})).filter(x=>x.d>=20).sort((x,y)=>(y.c.v-pcats[y.c.k])-(x.c.v-pcats[x.c.k]));
+    if(ups.length){const u=ups[0];notes.push(`صرفك على <b>${esc((CATS[u.c.k]||CATS[5])[0])}</b> زاد <b>${u.d}٪</b> عن نفس الفترة ${esc(pname)}.`)}
+    const downs=cl.filter(c=>pcats[c.k]>0&&pcats[c.k]-c.v>=Math.max(100,total*0.03)).map(c=>({c,d:Math.round((pcats[c.k]-c.v)/pcats[c.k]*100)})).filter(x=>x.d>=20).sort((x,y)=>y.d-x.d);
+    if(downs.length){const u=downs[0];notes.push(`برافو، صرفك على <b>${esc((CATS[u.c.k]||CATS[5])[0])}</b> قلّ <b>${u.d}٪</b> عن ${esc(pname)}.`)}
+    if(tp>=35&&period!=='week'){const save=Math.round(top.v*0.15/10)*10;if(save>0)notes.push(`لو قللت ${esc(tn)} ١٥٪ بس، هتوفر حوالي <b>${esc(money(save))} ج.م</b> ${period==='year'?'في السنة':'في الشهر'}.`)}
+    h+='<section class="card"><h3>ملاحظات على مصاريفك</h3><ul class="notes">'+notes.map(n=>'<li>'+n+'</li>').join('')+'</ul></section>';
+  }
+
   // trend
   const b=bars(period,r);
   if(b){const m=Math.max(...b.v,1),mi=b.v.indexOf(Math.max(...b.v));
@@ -674,10 +729,15 @@ $('statsBody').onclick=e=>{
   const c=e.target.closest('[data-cat]');if(c){const k=+c.dataset.cat;openCat=openCat===k?null:k;renderStats();return}
   const b=e.target.closest('[data-bar]');if(b){const k=+b.dataset.bar;selBar=selBar===k?null:k;renderStats()}
 };
-function setTab(t){tab=t;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
+function setTab(t){tab=t;document.querySelectorAll('.tab[data-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
   $('homeView').hidden=t!=='home';$('statsView').hidden=t!=='stats';$('hTitle').textContent=t==='home'?'مصروفي':'الإحصائيات';
   $('hint').hidden=t!=='home'||st.items.length>0;if(t==='stats')renderStats();window.scrollTo(0,0)}
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
+document.querySelectorAll('.tab[data-tab]').forEach(b=>b.onclick=()=>setTab(b.dataset.tab));
+
+$('payBtn').onclick=()=>{const v=parseFloat($('payAmt').value);if(!(v>0)){$('payAmt').focus();return}
+  const mk=new Date().getFullYear()+'-'+new Date().getMonth();try{localStorage.setItem('masrofi-pay-snooze','done-'+mk)}catch(e){}
+  $('payAmt').value='';commit(()=>st.items.push({id:Date.now().toString(36)+'p',amt:v,note:'المرتب',cat:null,type:'in',t:Date.now()}),'اتضاف '+money(v)+' ج.م للرصيد')};
+$('payLater').onclick=()=>{try{localStorage.setItem('masrofi-pay-snooze',dayKey(new Date()))}catch(e){}render()};
 load();render();
 }
 </script>
