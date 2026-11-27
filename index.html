@@ -186,7 +186,10 @@ border:1px solid var(--line);border-radius:26px;box-shadow:0 10px 30px -10px lig
 .heard{font-size:14px;color:var(--mute);margin:-2px 0 6px}
 .type{display:flex;gap:8px}
 .type input{flex:1;min-height:52px;border:1px solid var(--line);border-radius:14px;background:var(--soft);padding:0 14px}
-.setup{min-height:80vh;display:flex;flex-direction:column;justify-content:center;text-align:center}
+.setup{min-height:calc(100svh - 28px);display:flex;flex-direction:column;text-align:center;padding-bottom:max(9vh,40px)}
+.setup-top{flex:1;display:grid;place-items:center;padding-top:6vh}
+.setup-icon{width:96px;height:96px;filter:drop-shadow(0 12px 18px #3b1f5c40)}
+.setup-form{width:100%;max-width:440px;margin:0 auto}
 .setup h1{font-size:30px;line-height:1.2;margin:0 0 8px}
 .setup p{color:var(--mute);margin:0 0 22px}
 .setup input{width:100%;font-size:34px;font-weight:800;text-align:center;min-height:68px;border:1px solid var(--line);border-radius:18px;background:var(--soft);margin-bottom:12px}
@@ -217,9 +220,19 @@ textarea{width:100%;min-height:80px;font:13px monospace;border:1px solid var(--l
 </section>
 <div class="wrap">
   <section id="setup" class="setup" hidden>
-    <h1>معاك كام دلوقتي؟</h1>
-        <input id="startIn" type="number" inputmode="decimal" placeholder="1000" aria-label="المبلغ اللي معاك">
-    <button class="btn" id="startBtn">ابدأ</button>
+    <div class="setup-top"><svg class="setup-icon" viewBox="0 0 120 120" aria-hidden="true">
+  <defs><linearGradient id="suB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#d9cfee"/></linearGradient>
+  <linearGradient id="suC" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8a70"/><stop offset="1" stop-color="#e8443c"/></linearGradient></defs>
+  <g><rect x="30" y="22" width="40" height="26" rx="5" fill="#ffc44d" transform="rotate(-8 50 35)"/></g>
+  <g><rect x="46" y="24" width="40" height="26" rx="5" fill="#2fc48e" transform="rotate(6 66 37)"/></g>
+  <g><rect x="18" y="44" width="84" height="56" rx="14" fill="#7d6aa6"/><rect x="18" y="40" width="84" height="56" rx="14" fill="url(#suB)"/>
+  <rect x="68" y="56" width="40" height="26" rx="10" fill="url(#suC)"/><circle cx="80" cy="69" r="6" fill="#fff"/></g>
+</svg></div>
+    <div class="setup-form">
+      <h1>معاك كام دلوقتي؟</h1>
+      <input id="startIn" type="number" inputmode="decimal" placeholder="1000" aria-label="المبلغ اللي معاك">
+      <button class="btn" id="startBtn">ابدأ</button>
+    </div>
   </section>
 
   <main id="app" hidden>
@@ -828,6 +841,7 @@ window.masrofiApp={
   signedIn:()=>enter(),
   signedOut:()=>showSplashButton(),
   splashMsg:(m)=>{$('spMsg').textContent=m||''},
+  tapped:()=>{userTapped=true},
   setAccount:(a)=>{Object.assign(acct,a);renderAccount()},
   toast:(m)=>{toast(m,false);clearTimeout(tm);tm=setTimeout(()=>$('toast').classList.remove('show'),12000)}
 };
@@ -848,8 +862,10 @@ $('photoIn').onchange=async e=>{const f=e.target.files&&e.target.files[0];e.targ
 
 /* ---------- splash + sign-in gate ---------- */
 const cloudOn=!!(window.FIREBASE_CONFIG&&window.FIREBASE_CONFIG.apiKey);
-let animDone=false,authKnown=null;
-function enter(){authKnown='in';if(!animDone)return;if(entered)return;entered=true;render();if(tab==='account')renderAccount();$('splash').classList.add('out');setTimeout(()=>{$('splash').hidden=true},500)}
+let animDone=false,authKnown=null,userTapped=false;
+function enter(){authKnown='in';if(!animDone)return;if(entered)return;
+  if(st.start===null&&!userTapped){$('spGo').hidden=false;$('spMsg').textContent='';return} // new account: wait for an explicit tap
+ entered=true;render();if(tab==='account')renderAccount();$('splash').classList.add('out');setTimeout(()=>{$('splash').hidden=true},500)}
 function showSplashButton(){authKnown='out';entered=false;setTab('home');$('splash').hidden=false;$('splash').classList.remove('out');render();if(animDone){$('spGo').hidden=false;$('spMsg').textContent=''}}
 setTimeout(()=>{animDone=true;
   if(!cloudOn){enter();return}
@@ -877,7 +893,7 @@ if(cfg&&cfg.apiKey&&app){(async()=>{try{
   window.addEventListener('masrofi:saved',schedule);
   window.addEventListener('online',()=>{if(ref)push()});
   window.masrofiCloud={
-    signIn:async()=>{try{await A.signInWithPopup(auth,provider)}catch(e){
+    signIn:async()=>{app.tapped();try{await A.signInWithPopup(auth,provider)}catch(e){
       if(e&&(e.code==='auth/popup-blocked'||e.code==='auth/operation-not-supported-in-this-environment'||e.code==='auth/web-storage-unsupported'))return A.signInWithRedirect(auth,provider);
       if(e&&e.code!=='auth/popup-closed-by-user'&&e.code!=='auth/cancelled-popup-request')app.toast('مقدرتش أسجل الدخول: '+String((e&&(e.code||e.message))||e).replace('auth/','').slice(0,140))}},
     signOut:async()=>{try{if(unsub)unsub();unsub=null;ref=null;await A.signOut(auth);if(window.google&&google.accounts&&google.accounts.id)google.accounts.id.disableAutoSelect()}catch(e){}
@@ -890,7 +906,7 @@ if(cfg&&cfg.apiKey&&app){(async()=>{try{
   if(CID){try{
     await new Promise((res,rej)=>{if(window.google&&google.accounts&&google.accounts.id)return res();const sc=document.createElement('script');sc.src='https://accounts.google.com/gsi/client';sc.async=true;sc.onload=res;sc.onerror=rej;document.head.appendChild(sc)});
     google.accounts.id.initialize({client_id:CID,auto_select:false,cancel_on_tap_outside:true,itp_support:true,use_fedcm_for_button:true,
-      callback:async r=>{app.splashMsg('بندخلك…');try{await A.signInWithCredential(auth,A.GoogleAuthProvider.credential(r.credential))}
+      callback:async r=>{app.tapped();app.splashMsg('بندخلك…');try{const cred=await A.signInWithCredential(auth,A.GoogleAuthProvider.credential(r.credential));if(user&&cred&&cred.user&&cred.user.uid===user.uid){app.splashMsg('');app.signedIn()}}
         catch(e){app.splashMsg('مقدرتش أسجل الدخول: '+String((e&&(e.code||e.message))||e).replace('auth/','').slice(0,120))}}});
     const el=document.getElementById('gsiSplash');google.accounts.id.renderButton(el,{theme:'outline',size:'large',shape:'pill',text:'continue_with',locale:'ar',width:Math.min(360,Math.max(240,Math.round(innerWidth-48)))});
     app.setAccount({gsi:true});
