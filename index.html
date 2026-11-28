@@ -747,8 +747,9 @@ const leftOf=s2=>s2.start+sum(s2.items.filter(i=>i.type==='in'))-sum(s2.items.fi
 
 /* understand what was said, then confirm */
 let pending=null;
-function handleText(text){
-  heardText=text;pending=parseCommand(text,st.items);$('heard').hidden=false;$('againBtn').hidden=false;
+let inputSrc='voice';
+function handleText(text,src){inputSrc=src||'voice';
+  heardText=text;pending=parseCommand(text,st.items);$('heard').hidden=false;$('againBtn').hidden=false;$('againBtn').textContent=inputSrc==='type'?'عدّل الكلام':'اتكلم تاني';
   $('heard').textContent='«'+text+'»';
   if(pending.kind==='undo'){open(null);doUndo();return}
   if(pending.kind==='spend'){draft=pending.items;draftYest=pending.yesterday;
@@ -843,7 +844,7 @@ $('saveBtn').onclick=()=>{
     commit(()=>{const it=st.items.find(i=>i.id===pending.id);if(it)it.amt=v},'اتعدّل');
   }
 };
-$('againBtn').onclick=()=>startRec();
+$('againBtn').onclick=()=>{if(inputSrc==='type'){const t=heardText;openType();$('typeIn').value=t;typePreview();const el=$('typeIn');el.setSelectionRange(t.length,t.length)}else startRec()};
 
 /* voice */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -871,7 +872,7 @@ function startRec(){
     else if(e.error==='no-speech'){cancelled=true;$('lsTitle').textContent='مسمعتش حاجة';$('live').innerHTML='<i>دوس «اتكلم تاني» وقرّب الموبايل شوية</i>';$('pulse').style.opacity=.4;$('doneBtn').textContent='اتكلم تاني';}
     else if(e.error==='network'){cancelled=true;openType('التعرف على الصوت محتاج نت. اكتب بدل كده.')}
   };
-  rec.onend=()=>{rec=null;if(cancelled)return;const text=(finals.join(' ')+' '+interim).trim();if(text)handleText(text);else{$('lsTitle').textContent='مسمعتش حاجة';$('pulse').style.opacity=.4;$('doneBtn').textContent='اتكلم تاني'}};
+  rec.onend=()=>{rec=null;if(cancelled)return;const text=(finals.join(' ')+' '+interim).trim();if(text)handleText(text,'voice');else{$('lsTitle').textContent='مسمعتش حاجة';$('pulse').style.opacity=.4;$('doneBtn').textContent='اتكلم تاني'}};
   $('doneBtn').textContent='خلصت';
   try{rec.start()}catch(e){}
 }
@@ -905,7 +906,7 @@ $('typeIn').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.pr
 if(window.visualViewport){const vv=visualViewport,fit=()=>{const k=Math.max(0,innerHeight-vv.height-vv.offsetTop);$('typeSheet').style.paddingBottom=k+'px'};vv.addEventListener('resize',fit);vv.addEventListener('scroll',fit)}
 
 $('kbBtn').onclick=()=>{fab(false);openType()};
-$('typeForm').onsubmit=e=>{e.preventDefault();const v=$('typeIn').value.trim();if(!v)return;$('typeIn').value='';handleText(v)};
+$('typeForm').onsubmit=e=>{e.preventDefault();const v=$('typeIn').value.trim();if(!v)return;handleText(v,'type')};
 
 /* list delete + undo */
 $('list').onclick=e=>{const b=e.target.closest('[data-item]');if(!b)return;pending={kind:'delete',ids:[b.dataset.item],checked:[true]};$('heard').hidden=true;$('againBtn').hidden=true;drawDelete();open('reviewSheet')};
