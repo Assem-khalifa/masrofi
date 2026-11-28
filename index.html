@@ -172,6 +172,23 @@ header b{font-size:18px;font-weight:800}
 .confetti{position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,#ff5a4e 3px,transparent 4px),radial-gradient(circle,#ffc44d 3px,transparent 4px),radial-gradient(circle,#2fc48e 3px,transparent 4px),radial-gradient(circle,#7a5af8 3px,transparent 4px);background-size:70px 90px,90px 70px,60px 110px,110px 60px;background-position:0 0,30px 20px,15px 45px,50px 10px;animation:fall 2.4s linear infinite;opacity:.8}
 @keyframes fall{to{background-position:0 180px,30px 160px,15px 265px,50px 130px}}
 .amt.unsave{color:#14a374}
+.lsrow{display:flex;gap:10px;align-items:center;margin-top:14px}
+.lsrow .btn{flex:1;width:auto}
+.round{width:52px;height:52px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--soft);color:var(--ink);display:grid;place-items:center}
+.round svg{width:24px;height:24px}
+#cancelBtn{display:block;margin:6px auto 0}
+.micwrap{position:relative;display:grid;place-items:center}
+.kbmini{position:absolute;top:-34px;inset-inline-end:-30px;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--bg);color:var(--ink);display:grid;place-items:center;box-shadow:0 4px 14px -4px #0004}
+.kbmini svg{width:20px;height:20px}
+.kbmini::before{content:"";position:absolute;inset:-4px}
+.tsheet textarea{width:100%;min-height:56px;max-height:30vh;resize:none;border:1.5px solid #7a5af8;border-radius:16px;background:var(--soft);padding:14px;font:18px/1.6 Cairo,sans-serif;color:var(--ink);overflow:auto}
+.tprev{min-height:24px;margin:10px 2px 0;display:flex;flex-wrap:wrap;gap:6px}
+.tprev span{background:var(--soft);border-radius:999px;padding:4px 12px;font-size:14px;font-weight:600}
+.tprev span.in{color:var(--mint)}.tprev span.act{color:#7a5af8}
+.tprev small{color:var(--mute);font-size:13px;align-self:center}
+.trow{display:flex;justify-content:space-between;align-items:center;margin-top:14px}
+.trow .btn{width:auto;padding:0 28px}
+#typeSheet{transition:padding-bottom .15s}
 .dayh{display:flex;justify-content:space-between;color:var(--mute);font-size:14px;font-weight:600;padding:18px 0 4px}
 .row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
 .dot{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;font-weight:800;color:#fff;flex:none;font-size:15px}
@@ -233,7 +250,7 @@ border:1px solid var(--line);border-radius:26px;box-shadow:0 10px 30px -10px lig
 @keyframes up{from{transform:translateY(40px);opacity:.5}}
 .sheet h2{font-size:20px;margin:0 0 4px;font-weight:800}
 .sheet p{margin:0 0 14px;color:var(--mute);font-size:14px}
-.listen{text-align:center;padding:10px 0}
+.listen{text-align:center;padding:22px 18px max(20px,env(safe-area-inset-bottom))}
 .pulse{width:104px;height:104px;margin:14px auto;border-radius:50%;background:var(--coral);display:grid;place-items:center;color:#fff;position:relative}
 .pulse svg{width:40px;height:40px}
 .pulse::before,.pulse::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--coral);opacity:.35;animation:ring 1.6s infinite}
@@ -370,7 +387,7 @@ textarea{width:100%;min-height:80px;font:13px monospace;border:1px solid var(--l
 <nav class="dock" id="dock" hidden>
   <button class="tab on" data-tab="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg><span>الرئيسية</span></button>
   <button class="tab" data-tab="stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 20V11M12 20V5M19 20v-6"/></svg><span>الإحصائيات</span></button>
-  <button class="mic" id="micBtn" aria-label="سجّل بصوتك"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
+  <div class="micwrap"><button class="mic" id="micBtn" aria-label="سجّل بصوتك"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button><button class="kbmini" id="kbBtn" aria-label="اكتب بدل ما تتكلم" title="اكتب"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2.5" y="6" width="19" height="12" rx="2.5"/><path d="M6.5 10h.01M10 10h.01M13.5 10h.01M17 10h.01M8 14h8"/></svg></button></div>
   <button class="tab" data-tab="goal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="13" r="8"/><circle cx="11" cy="13" r="4"/><circle cx="11" cy="13" r=".6" fill="currentColor"/><path d="M11 13l7-7M15 6h3v3"/></svg><span>هدفي</span></button>
   <button class="tab" data-tab="account"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>حسابي</span></button>
 
@@ -382,15 +399,18 @@ textarea{width:100%;min-height:80px;font:13px monospace;border:1px solid var(--l
   <p id="lsSub">مثلاً: «صرفت ١٠٠ أكل و٢٠ مواصلات»</p>
   <div class="pulse" id="pulse"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></div>
   <div class="live" id="live"><i>…</i></div>
-  <div class="btns"><button class="btn coral" id="doneBtn">خلصت</button><button class="later" id="cancelBtn">إلغاء</button></div>
+  <div class="lsrow"><button class="btn coral" id="doneBtn">خلصت</button></div>
+  <button class="later" id="cancelBtn">إلغاء</button>
 </div></div>
 
 <!-- type sheet -->
-<div class="scrim" id="typeSheet"><div class="sheet">
+<div class="scrim" id="typeSheet"><div class="sheet tsheet">
   <h2>اكتب صرفت إيه</h2>
-  <p>اكتب زي ما بتتكلم، مثلاً: 1000 أكل و20 مواصلات · ضيف 5000 على الرصيد · امسح آخر حاجة</p>
-  <form class="type" id="typeForm"><input id="typeIn" type="text" autocomplete="off" aria-label="صرفت إيه"><button class="btn" style="width:auto;padding:0 20px">تمام</button></form>
-  <div class="btns"><button class="btn ghost" data-close>إلغاء</button></div>
+  <form id="typeForm">
+    <textarea id="typeIn" rows="1" enterkeyhint="done" autocomplete="off" placeholder="مثلاً: 100 أكل و20 مواصلات" aria-label="صرفت إيه"></textarea>
+    <div class="tprev" id="tPrev" aria-live="polite"></div>
+    <div class="trow"><button type="button" class="later" data-close>إلغاء</button><button class="btn" id="typeGo" disabled>تمام</button></div>
+  </form>
 </div></div>
 
 <!-- review sheet -->
@@ -845,8 +865,25 @@ $('doneBtn').onclick=()=>{if(rec){$('lsTitle').textContent='بفهم…';stopRec
 $('cancelBtn').onclick=()=>{stopRec(true);open(null)};
 
 /* typing fallback */
-function openType(msg){open('typeSheet');if(msg)toast(msg,false);setTimeout(()=>$('typeIn').focus(),150)}
+function openType(msg){open('typeSheet');$('typeIn').value='';typePreview();if(msg)toast(msg,false);setTimeout(()=>$('typeIn').focus(),60)}
+function typePreview(){const t=$('typeIn');t.style.height='auto';t.style.height=Math.min(t.scrollHeight,innerHeight*.3)+'px';
+  const v=t.value.trim();$('typeGo').disabled=!v;const box=$('tPrev');if(!v){box.innerHTML='';return}
+  const c=parseCommand(v,st.items),chip=(x,cl)=>`<span class="${cl||''}">${esc(x)}</span>`;let h='';
+  if(c.kind==='spend')h=c.items.length?c.items.map(i=>chip((i.type==='in'?'+ ':'')+i.name+' · '+money(i.amt),i.type==='in'?'in':'')).join(''):'<small>اكتب المبلغ…</small>';
+  else if(c.kind==='delete')h=chip(c.ids.length?'هتمسح '+c.ids.length+(c.ids.length===1?' حاجة':' حاجات'):'هتمسح…','act');
+  else if(c.kind==='set')h=chip('الباقي هيبقى '+money(c.value),'act');
+  else if(c.kind==='edit')h=chip('تعديل لـ '+money(c.to),'act');
+  else if(c.kind==='save')h=chip('تحويش '+money(c.amt)+' للهدف','act');
+  else if(c.kind==='withdraw')h=chip('سحب '+money(c.amt)+' من الهدف','act');
+  else if(c.kind==='goal')h=chip('هدف جديد'+(c.name?': '+c.name:'')+(c.price?' · '+money(c.price):''),'act');
+  else if(c.kind==='undo')h=chip('تراجع عن آخر حاجة','act');
+  box.innerHTML=h}
+$('typeIn').addEventListener('input',typePreview);
+$('typeIn').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('typeForm').requestSubmit()}});
+// keep the popup above the on-screen keyboard (iOS doesn't resize the page)
+if(window.visualViewport){const vv=visualViewport,fit=()=>{const k=Math.max(0,innerHeight-vv.height-vv.offsetTop);$('typeSheet').style.paddingBottom=k+'px'};vv.addEventListener('resize',fit);vv.addEventListener('scroll',fit)}
 
+$('kbBtn').onclick=()=>openType();
 $('typeForm').onsubmit=e=>{e.preventDefault();const v=$('typeIn').value.trim();if(!v)return;$('typeIn').value='';handleText(v)};
 
 /* list delete + undo */
